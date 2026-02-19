@@ -1,0 +1,473 @@
+<ClarionProperties>
+  <ShowTipsAtStartup value="True" />
+  <Properties name="WorkbenchMemento">
+    <bounds value="0,0,800,600" />
+    <windowstate value="Maximized" />
+    <defaultstate value="Maximized" />
+  </Properties>
+  <MenuShorcuts_UseFullName value="False" />
+  <CoreProperties.UILanguage value="en-GB" />
+  <SoftVelocity.Gui.FileDialog.RememberInitialDirectory value="False" />
+  <Properties name="Clarion.Dictionary">
+    <EnforceDotNetNames value="False" />
+    <SortTables value="Label" />
+    <Properties name="DataTypeDefaults">
+      <Properties name="GROUP">
+        <Justification value="None" />
+        <Offset value="0" />
+      </Properties>
+      <Properties name="LONG">
+        <Justification value="Right" />
+        <Offset value="1" />
+      </Properties>
+      <Properties name="CSTRING">
+        <Justification value="None" />
+        <Offset value="0" />
+        <Characters value="21" />
+      </Properties>
+      <Properties name="BYTE">
+        <Justification value="None" />
+        <Offset value="0" />
+      </Properties>
+      <Properties name="DATE">
+        <Justification value="None" />
+        <Offset value="0" />
+      </Properties>
+      <Properties name="TIME">
+        <Justification value="None" />
+        <Offset value="0" />
+      </Properties>
+      <Properties name="STRING">
+        <Justification value="None" />
+        <Offset value="0" />
+        <Characters value="20" />
+      </Properties>
+      <Properties name="DECIMAL">
+        <Justification value="Decimal" />
+        <Offset value="12" />
+        <Characters value="7" />
+        <Places value="2" />
+      </Properties>
+      <Properties name="SHORT">
+        <Justification value="Right" />
+        <Offset value="1" />
+      </Properties>
+      <Properties name="QUEUE">
+        <Justification value="None" />
+        <Offset value="0" />
+      </Properties>
+      <Properties name="BSTRING">
+        <Justification value="None" />
+        <Offset value="0" />
+        <Characters value="20" />
+      </Properties>
+      <Properties name="ULONG">
+        <Justification value="Right" />
+        <Offset value="1" />
+      </Properties>
+      <Properties name="USHORT">
+        <Justification value="Right" />
+        <Offset value="1" />
+      </Properties>
+    </Properties>
+    <CopyDescriptionToMessage value="True" />
+    <CopyDescriptionToToolTip value="True" />
+    <DisplayTablePrefix value="False" />
+    <DisplayTableDriver value="False" />
+    <DisplayTableDescription value="False" />
+    <QuickViewType value="Advanced" />
+    <AskBeforePartialSave value="True" />
+    <DisplayColumnPrefix value="False" />
+    <DisplayColumnDerivation value="False" />
+    <DisplayColumnType value="False" />
+    <DisplayColumnPicture value="False" />
+    <DisplayColumnDescription value="False" />
+    <HotKeysOnTabs value="False" />
+    <DisplayKeyPrefix value="False" />
+    <DisplayKeyType value="False" />
+    <DisplayKeyComponents value="False" />
+    <DisplayKeyUnique value="False" />
+    <DisplayKeyPrimary value="False" />
+    <DisplayKeyOtherAttributes value="False" />
+    <DisplayKeyDescription value="False" />
+  </Properties>
+  <Properties name="Clarion.Versions">
+    <Properties name="Clarion 10.0.12799">
+      <path value="c:\Clarion\Clarion10\bin" />
+      <IsWindowsVersion value="True" />
+      <IsClarion62 value="False" />
+      <Properties name="RedirectionFile">
+        <Name value="Clarion100.red" />
+        <SupportsInclude value="True" />
+        <Properties name="Macros">
+          <root value="c:\Clarion\Clarion10" />
+          <reddir value="c:\Clarion\Clarion10\bin" />
+        </Properties>
+      </Properties>
+      <libsrc value="c:\Clarion\Clarion10\libsrc\win;c:\Clarion\Clarion10\Accessory\libsrc\win" />
+      <Properties name="Compilers">
+        <clw value="Claclw.dll" />
+        <cpp value="Clacpp.dll" />
+        <mod value="Clamod.dll" />
+        <asm value="Claasm.dll" />
+        <lpe value="Clalpe.dll" />
+      </Properties>
+      <CWVersion value="10000" />
+    </Properties>
+    <Properties name="Clarion.NET 4.0.12799">
+      <path value="c:\Clarion\Clarion10\bin" />
+      <IsWindowsVersion value="False" />
+      <Properties name="RedirectionFile">
+        <Name value="ClarionNet40.red" />
+        <SupportsInclude value="True" />
+        <Properties name="Macros">
+          <root value="c:\Clarion\Clarion10" />
+          <reddir value="c:\Clarion\Clarion10\bin" />
+        </Properties>
+      </Properties>
+      <libsrc value="c:\Clarion\Clarion10\libsrc\DotNet" />
+    </Properties>
+    <Properties name="Clarion 10.0.12463">
+      <path value="C:\Clarion\Clarion10Accura\bin" />
+      <IsWindowsVersion value="True" />
+      <IsClarion62 value="False" />
+      <Properties name="RedirectionFile">
+        <Name value="Clarion100.red" />
+        <SupportsInclude value="True" />
+        <Properties name="Macros">
+          <root value="C:\Clarion\Clarion10Accura" />
+          <reddir value="C:\Clarion\Clarion10Accura\bin" />
+        </Properties>
+      </Properties>
+      <libsrc value="C:\Clarion\Clarion10Accura\libsrc\win;C:\Clarion\Clarion10Accura\Accessory\libsrc\win" />
+      <Properties name="Compilers">
+        <clw value="Claclw.dll" />
+        <cpp value="Clacpp.dll" />
+        <mod value="Clamod.dll" />
+        <asm value="Claasm.dll" />
+        <lpe value="Clalpe.dll" />
+      </Properties>
+      <CWVersion value="10000" />
+      <ini value="" />
+    </Properties>
+    <Properties name="Clarion.NET 4.0.12463">
+      <path value="C:\Clarion\Clarion10Accura\bin" />
+      <IsWindowsVersion value="False" />
+      <Properties name="RedirectionFile">
+        <Name value="ClarionNet40.red" />
+        <SupportsInclude value="True" />
+        <Properties name="Macros">
+          <root value="C:\Clarion\Clarion10Accura" />
+          <reddir value="C:\Clarion\Clarion10Accura\bin" />
+        </Properties>
+      </Properties>
+      <libsrc value="C:\Clarion\Clarion10Accura\libsrc\DotNet" />
+      <CWVersion value="2000" />
+    </Properties>
+  </Properties>
+  <Properties name="RecentOpen" />
+  <RemoveMissingRecents value="True" />
+  <MaximumRecentEntries value="16" />
+  <DeleteWillSendToRecycleBin value="True" />
+  <ICSharpCode.SharpDevelop.Gui.SupportMultipleInstances value="True" />
+  <Properties name="SoftVelocity.Lic">
+    <Name value="Mark Sarson" />
+    <Serial_10 value="YOUR-CLARION-SERIAL-HERE" />
+    <ClarionSharpSerial_10 value="" />
+  </Properties>
+  <ShowStatusMessage value="True" />
+  <ShowStatusProgress value="True" />
+  <ShowNotification value="False" />
+  <ICSharpCode.SharpDevelop.Gui.UseProfessionalRenderer value="True" />
+  <ICSharpCode.SharpDevelop.Gui.ProfessionalRendererColorTableStyles value="Default" />
+  <Properties name="CodeCompletionOptions">
+    <EnableCC value="True" />
+    <TooltipsEnabled value="True" />
+    <TooltipsOnlyWhenDebugging value="False" />
+  </Properties>
+  <Workbench.CurrentLayout value="Application" />
+  <MergedTools value="Clarion-tools" />
+  <ICSharpCode.SharpDevelop.Gui.UseSmallIconsInToolbar value="False" />
+  <Properties name="ToolbarService">
+    <DocumentIconSize value="24" />
+    <DocumentHeight value="42" />
+    <FrameIconSize value="24" />
+    <FrameHeight value="42" />
+    <PadIconSize value="24" />
+    <PadHeight value="34" />
+  </Properties>
+  <Properties name="Workspace.ViewMementos" />
+  <Properties name="ICSharpCode.SharpDevelop.Gui.FullscreenOptions">
+    <HideMainMenu value="False" />
+    <ShowMainMenuOnMouseMove value="True" />
+    <HideToolbars value="True" />
+    <HideStatusBar value="True" />
+    <ShowStatusBarOnMouseMove value="True" />
+  </Properties>
+  <ICSharpCode.SharpDevelop.Gui.ToolBarVisible value="True" />
+  <ICSharpCode.SharpDevelop.Gui.StatusBarVisible value="True" />
+  <SharpDevelop.LoadPrevProjectOnStartup value="False" />
+  <Properties name="CoreProperties.ComponentsFont">
+    <Array name="ListOfFonts">
+      <Element value="ListControls|List Controls|Segoe UI,9" />
+      <Element value="StartPage|Start Page|Segoe UI,17" />
+      <Element value="TextEditor|Text Editor, Output Window (Proportional Font)|Courier New,10" />
+    </Array>
+  </Properties>
+  <Properties name="AppGen Dialogs">
+    <DlgFontName value="Segoe UI" />
+    <DlgFontSize value="9" />
+  </Properties>
+  <SharpDevelop.LoadDocumentProperties value="True" />
+  <Properties name="Environment">
+    <Properties name="File Drivers">
+      <Version value="1" />
+      <Claado.dll value="installed" />
+      <Claasc.dll value="installed" />
+      <Clabas.dll value="installed" />
+      <Clabtr.dll value="installed" />
+      <Clacla.dll value="installed" />
+      <Claclp.dll value="installed" />
+      <Cladb3.dll value="installed" />
+      <Cladb4.dll value="installed" />
+      <Clados.dll value="installed" />
+      <Clafox.dll value="installed" />
+      <Clamem.dll value="installed" />
+      <Clamss.dll value="installed" />
+      <Claodb.dll value="installed" />
+      <Claora.dll value="installed" />
+      <Clasca.dll value="installed" />
+      <Clasqa.dll value="installed" />
+      <Clalit.dll value="installed" />
+      <Clatps.dll value="installed" />
+    </Properties>
+    <Properties name="Data Dictionaries">
+      <Properties name="Clarion Dictionary">
+        <DLL value="Cladct.dll" />
+        <deletable value="0" />
+      </Properties>
+      <Properties name="Clarion TXD File">
+        <DLL value="Cladct.dll" />
+        <deletable value="0" />
+      </Properties>
+      <Properties name="Clarion XML File">
+        <DLL value="Cladct.dll" />
+        <deletable value="0" />
+      </Properties>
+      <Properties name="C6 Clarion Dictionary File">
+        <DLL value="Cladct.dll" />
+        <deletable value="0" />
+      </Properties>
+      <Properties name="Comma Delimited Files (Basic)">
+        <DLL value="ClaBASS.DLL" />
+        <deletable value="1" />
+      </Properties>
+      <Properties name="Btrieve Files via DDF">
+        <DLL value="ClaBTRS.DLL" />
+        <deletable value="1" />
+      </Properties>
+      <Properties name="Btrieve Files">
+        <DLL value="ClaBTRS.DLL" />
+        <deletable value="1" />
+      </Properties>
+      <Properties name="Clarion .DAT Files">
+        <DLL value="ClaCLAS.DLL" />
+        <deletable value="1" />
+      </Properties>
+      <Properties name="Clipper Files">
+        <DLL value="ClaCLPS.DLL" />
+        <deletable value="1" />
+      </Properties>
+      <Properties name="dBaseIII Files">
+        <DLL value="ClaDB3S.DLL" />
+        <deletable value="1" />
+      </Properties>
+      <Properties name="dBaseIV Files">
+        <DLL value="ClaDB4S.DLL" />
+        <deletable value="1" />
+      </Properties>
+      <Properties name="FoxPro Files">
+        <DLL value="ClaFOXS.DLL" />
+        <deletable value="1" />
+      </Properties>
+      <Properties name="Microsoft SQL Server">
+        <DLL value="ClaMSSS.DLL" />
+        <deletable value="1" />
+      </Properties>
+      <Properties name="ODBC">
+        <DLL value="ClaODBCS.DLL" />
+        <deletable value="1" />
+      </Properties>
+      <Properties name="Oracle">
+        <DLL value="ClaORAS.DLL" />
+        <deletable value="1" />
+      </Properties>
+      <Properties name="Pervasive SQL Server">
+        <DLL value="ClaSCAS.DLL" />
+        <deletable value="1" />
+      </Properties>
+      <Properties name="SQL Anywhere Server">
+        <DLL value="ClaSQAS.DLL" />
+        <deletable value="1" />
+      </Properties>
+      <Properties name="SQLite">
+        <DLL value="ClaLitS.DLL" />
+        <deletable value="1" />
+      </Properties>
+      <Properties name="TopSpeed Files">
+        <DLL value="ClaTPSS.DLL" />
+        <deletable value="1" />
+      </Properties>
+    </Properties>
+  </Properties>
+  <Properties name="WindowPositions">
+    <Properties name="AddInManager">
+      <bounds value="0, 0, 476, 429" />
+    </Properties>
+    <Properties name="HostedDialogPrompts Based Dialog">
+      <bounds value="691,210,538,612" />
+    </Properties>
+    <Properties name="LoadViaRedirectionFileDialog">
+      <bounds value="680, 433, 560, 165" />
+    </Properties>
+    <Properties name="SearchAndReplaceDialog">
+      <location value="0, 0" />
+    </Properties>
+    <Properties name="SoftVelocity.Common.Dialogs.FileDrivers.RegisterFileDrivers+FileDriverListDialog">
+      <bounds value="689, 297, 541, 438" />
+    </Properties>
+  </Properties>
+  <ICSharpCode.SharpDevelop.Gui.Dialogs.NewProjectDialog.DefaultPath value="F:\development\accura" />
+  <SharpDevelop.UseReleaseAsDefault value="True" />
+  <SharpDevelop.PreferenceInSolutionFolder value="False" />
+  <SharpDevelop.UseLastSolutionFolderForDefault value="True" />
+  <ProjectBrowser.ShowAll value="False" />
+  <Properties name="SharpDevelop.UI.OutputWindowOptions">
+    <WordWrap value="True" />
+  </Properties>
+  <SharpDevelop.CloseStartPageOnSolutionOpening value="True" />
+  <SharpDevelop.TreatUnrelatedFilesAsSolutions value="False" />
+  <Properties name="TextEditorSettings">
+    <Encoding value="0" />
+    <ShowBracketHighlight value="True" />
+    <LineViewerStyle value="None" />
+    <ShowHRuler value="False" />
+    <EnableFolding value="True" />
+    <ShowQuickClassBrowserPanel value="True" />
+    <ShowErrors value="True" />
+    <CursorBehindEOL value="False" />
+    <TabIndent value="4" />
+    <TextRenderingHint value="SystemDefault" />
+    <IconBarVisible value="True" />
+    <ShowLineNumbers value="True" />
+    <ShowSpaces value="False" />
+    <ShowEOLMarkers value="False" />
+    <ShowVRuler value="False" />
+    <ShowInvalidLines value="False" />
+    <MouseWheelScrollDown value="True" />
+    <TabsToSpaces value="True" />
+    <IndentationSize value="4" />
+    <BracketMatchingStyle value="After" />
+    <DocumentSelectionMode value="Normal" />
+    <IndentStyle value="Smart" />
+    <CutCopyWholeLine value="True" />
+    <HideMouseCursor value="False" />
+  </Properties>
+  <Properties name="ClarionWindows.GeneralOptions">
+    <ProjectParsingCondition value="ParseHandCodedAndOpenedApp" />
+    <UseLightweightParsingMode value="True" />
+    <CopyDlls value="True" />
+  </Properties>
+  <Properties name="SoftVelocity.Generator.ApplicationService">
+    <ApplicationPadSplitter1 value="177" />
+    <generationModeConditional value="GlobalOption" />
+    <generateTrace value="GlobalOption" />
+    <generateSelection value="All" />
+    <makeAndRunWihtDebuger value="Off" />
+    <generateBeforeBuild value="On" />
+    <HaveLocator value="True" />
+    <LocatorOnToolbar value="True" />
+    <cacheAppAfterEdit value="False" />
+    <AlwaysShowChangedDateTime value="True" />
+    <RestoreSolutionViewState value="False" />
+  </Properties>
+  <Properties name="StartingDirectories">
+    <U002A.sln value="F:\development\accura" />
+  </Properties>
+  <up_vc_Interface.Options.SelectAppHeight value="502" />
+  <up_vc_Interface.Options.SelectAppTop value="216" />
+  <up_vc_Interface.Options.SelectAppLeft value="540" />
+  <up_vc_Interface.Options.SelectAppWidth value="498" />
+  <Properties name="SoftVelocity.FileSchemaPad">
+    <FileSchemaPadHorizontal value="False" />
+    <FileSchemaPadHorizontalSeperator value="0" />
+  </Properties>
+  <Properties name="ICSharpCode.Svn.Options">
+    <UseHistoryDisplayBinding value="True" />
+  </Properties>
+  <Properties name="ClarionEditor">
+    <ShowBlockIndentDialog value="True" />
+    <LineOfCodeWidth value="80" />
+  </Properties>
+  <Array name="SharpDevelop.TaskListTokens">
+    <Element value="HACK" />
+    <Element value="TODO" />
+    <Element value="UNDONE" />
+    <Element value="FIXME" />
+  </Array>
+  <SharpDevelop.KillProcessBeforeBuild value="False" />
+  <SharpDevelop.KillCCCEXEBeforeBuild value="True" />
+  <SharpDevelop.BuildAsProcess value="True" />
+  <SharpDevelop.BuildProcesses value="1" />
+  <SharpDevelop.LoggerVerbosity value="Minimal" />
+  <SharpDevelop.ShowErrorListAfterBuild value="True" />
+  <Properties name="TaskViewControls">
+    <Properties name="ErrorList">
+      <Properties name="Columns">
+        <Description value="803" />
+        <File value="173" />
+        <Path value="173" />
+      </Properties>
+    </Properties>
+  </Properties>
+  <CoreProperties.QuietMode value="True" />
+  <Properties name="Application" />
+  <Properties name="SoftVelocity.ExceptionLogViewer">
+    <FilePattern value="exception-??????-??????.log" />
+  </Properties>
+  <Properties name="XmlEditor.AddIn.Options">
+    <ext.map value="" />
+    <ShowAttributesWhenFolded value="False" />
+  </Properties>
+  <SharpDevelop.FileChangeWatcher.DetectExternalChanges value="True" />
+  <Properties name="FileDialog">
+    <OpenFileViaRedDialogAutoComplete value="False" />
+  </Properties>
+  <Properties name="SharpDevelop.UI.CodeGenerationOptions">
+    <BlankLinesBetweenMembers value="True" />
+    <StartBlockOnSameLine value="True" />
+    <ElseOnClosing value="True" />
+  </Properties>
+  <SharpDevelop.UI.UseProjectAmbience value="True" />
+  <Properties name="SearchAndReplaceProperties">
+    <SearchAndReplaceBinding value="Current Document" />
+    <LookInFiletypes value="*.*" />
+    <MatchCase value="False" />
+    <MatchWholeWord value="False" />
+    <IncludeSubdirectories value="False" />
+    <IncludeReadOnlyBlocks value="True" />
+    <SearchStrategyType value="Normal" />
+    <LookIn value="C:\Users\msars\Documents\Clarion Projects" />
+    <FindPatterns value="fc0ÿMEMAUX_SSEC" />
+    <CircularSearch value="True" />
+  </Properties>
+  <SearchAndReplace.SearchResultPanelViewMode value="Flat" />
+  <Properties name="Type32">
+    <signed value="long" />
+    <unsigned value="long" />
+    <handle value="long" />
+    <bool value="long" />
+  </Properties>
+  <SharpDevelop.LineTerminatorStyle value="Windows" />
+  <SharpDevelop.FileChangeWatcher.AutoLoadExternalChanges value="True" />
+</ClarionProperties>
