@@ -60,7 +60,10 @@ param(
     [string]$SolutionPath = "accura.sln",
     
     [Parameter()]
-    [string]$ClarionPath
+    [string]$ClarionPath,
+
+    [Parameter()]
+    [string]$ConfigDir
 )
 
 # If no mode specified, default to GenerateBuild
@@ -432,10 +435,10 @@ if ($GenerateOnly -or $GenerateBuild) {
         
         try {
             $appLog = Join-Path $buildOutputDir "generate_$appName.log"
-            $configDir = "C:\BuildScripts\ClarionConfig"
+            $effectiveConfigDir = if ($ConfigDir) { $ConfigDir } else { "C:\BuildScripts\ClarionConfig" }
             
             $genProcess = Start-Process -FilePath $clarionCL `
-                -ArgumentList "/ConfigDir", "`"$configDir`"", "/win", "/rs", $Configuration, "/ag", "`"$($app.AppFile)`"" `
+                -ArgumentList "/ConfigDir", "`"$effectiveConfigDir`"", "/win", "/rs", $Configuration, "/ag", "`"$($app.AppFile)`"" `
                 -WorkingDirectory $solutionDir `
                 -NoNewWindow `
                 -Wait `
@@ -628,12 +631,14 @@ if ($BuildOnly -or $GenerateBuild) {
             
             $projectBuildLog = Join-Path $buildOutputDir "build_${projectName}.log"
             
+            $effectiveConfigDir = if ($ConfigDir) { $ConfigDir } else { "C:\BuildScripts\ClarionConfig" }
             $buildArgs = @(
                 "/property:GenerateFullPaths=true"
                 "/t:Rebuild"
                 "/property:Configuration=$Configuration"
                 "/property:clarion_Sections=$Configuration"
                 "/property:ClarionBinPath=`"$clarionBinPath`""
+                "/property:ConfigDir=`"$effectiveConfigDir`""
                 "/property:NoDependency=true"
                 "/verbosity:normal"
                 "/nologo"
@@ -687,6 +692,7 @@ if ($BuildOnly -or $GenerateBuild) {
                             "/property:Configuration=Release"
                             "/property:clarion_Sections=Release"
                             "/property:ClarionBinPath=`"$clarionBinPath`""
+                            "/property:ConfigDir=`"$effectiveConfigDir`""
                             "/property:NoDependency=true"
                             "/verbosity:normal"
                             "/nologo"

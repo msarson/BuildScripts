@@ -740,6 +740,10 @@ if ($GenerateAll -or $BuildAll -or $GenerateBuildAll) {
     # Pass Clarion path
     $compileArgs += "-ClarionPath"
     $compileArgs += "`"$clarion10Path`""
+
+    # Pass ConfigDir (mode-specific)
+    $compileArgs += "-ConfigDir"
+    $compileArgs += "`"$modeConfigDir`""
     
     # Call compile.ps1
     $compileScript = Join-Path $PSScriptRoot "compile.ps1"
