@@ -564,17 +564,19 @@ if ($BuildOnly -or $GenerateBuild) {
     Write-Host "=============================================" -ForegroundColor Gray
     Write-Host ""
     
-    # Seed debug\exp from release\exp if debug build and debug\exp doesn't exist yet.
-    # The linker requires pre-existing .exp files for DLL projects - they are created
-    # during the first successful build and reused on subsequent builds.
-    if ($Configuration -eq 'Debug') {
-        $releaseExpDir = Join-Path $solutionDir "genfiles\release\exp"
-        $debugExpDir   = Join-Path $solutionDir "genfiles\debug\exp"
-        if ((Test-Path $releaseExpDir) -and (-not (Test-Path $debugExpDir))) {
-            Write-Host "Seeding genfiles\debug\exp from release\exp (first debug build)..." -ForegroundColor Cyan
-            New-Item -ItemType Directory -Path $debugExpDir -Force | Out-Null
-            Copy-Item "$releaseExpDir\*" $debugExpDir -Force
-        }
+    # Seed debug\exp from release\exp (or vice versa) if the target exp directory doesn't
+    # exist yet. The linker requires pre-existing .exp files for DLL projects - they are
+    # created during the first successful build and reused on subsequent builds.
+    $releaseExpDir = Join-Path $solutionDir "genfiles\release\exp"
+    $debugExpDir   = Join-Path $solutionDir "genfiles\debug\exp"
+    if ($Configuration -eq 'Debug' -and (Test-Path $releaseExpDir) -and (-not (Test-Path $debugExpDir))) {
+        Write-Host "Seeding genfiles\debug\exp from release\exp (first debug build)..." -ForegroundColor Cyan
+        New-Item -ItemType Directory -Path $debugExpDir -Force | Out-Null
+        Copy-Item "$releaseExpDir\*" $debugExpDir -Force
+    } elseif ($Configuration -eq 'Release' -and (Test-Path $debugExpDir) -and (-not (Test-Path $releaseExpDir))) {
+        Write-Host "Seeding genfiles\release\exp from debug\exp (first release build)..." -ForegroundColor Cyan
+        New-Item -ItemType Directory -Path $releaseExpDir -Force | Out-Null
+        Copy-Item "$debugExpDir\*" $releaseExpDir -Force
     }
 
     # Determine number of passes
