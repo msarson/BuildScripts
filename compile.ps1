@@ -686,6 +686,24 @@ if ($BuildOnly -or $GenerateBuild) {
                             Copy-Item $projectBuildLog $debugBuildLog -Force
                         }
 
+                        # Re-generate this app in Release mode before building.
+                        # Generation in Debug mode writes MAP/source to debug paths;
+                        # the Release build needs them in release paths.
+                        $appFile = Join-Path $solutionDir "$projectName.app"
+                        if (Test-Path $appFile) {
+                            $regenLog = Join-Path $buildOutputDir "generate_${projectName}_release_regen.log"
+                            $regenProcess = Start-Process -FilePath $clarionCL `
+                                -ArgumentList "/ConfigDir", "`"$effectiveConfigDir`"", "/win", "/rs", "Release", "/ag", "`"$appFile`"" `
+                                -WorkingDirectory $solutionDir `
+                                -NoNewWindow `
+                                -Wait `
+                                -PassThru `
+                                -RedirectStandardOutput $regenLog
+                            if ($regenProcess.ExitCode -ne 0) {
+                                Write-Host "      (Release re-generation failed, build may still be attempted)" -ForegroundColor DarkYellow
+                            }
+                        }
+
                         $releaseBuildArgs = @(
                             "/property:GenerateFullPaths=true"
                             "/t:Rebuild"
