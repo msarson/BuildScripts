@@ -564,6 +564,14 @@ if ($BuildOnly -or $GenerateBuild) {
     Write-Host "=============================================" -ForegroundColor Gray
     Write-Host ""
     
+    # Ensure the exp directory exists for the target configuration so the linker
+    # can write .exp files on a clean workspace (directory must exist before first build).
+    $expDir = Join-Path $solutionDir "genfiles\$($Configuration.ToLower())\exp"
+    if (-not (Test-Path $expDir)) {
+        New-Item -ItemType Directory -Path $expDir -Force | Out-Null
+        Write-Host "Created $expDir" -ForegroundColor DarkGray
+    }
+
     # Determine number of passes
     $maxPasses = if ($hasCircularDeps) { 2 } else { 1 }
     
