@@ -8,6 +8,21 @@ config.json.backup_*
 # Temp/working files
 working-templates.txt
 
+# Clarion IDE-only files (not used by build scripts)
+ClarionConfig/Clarion-tools.xml
+ClarionConfig/MenuShorcuts.xml
+ClarionConfig/SideBarConfig.xml
+ClarionConfig/LibAlwaysCopyList.xml
+ClarionConfig/LibCopyList.xml
+ClarionConfig/LibIgnoreList.xml
+ClarionConfig/LibPrjIgnoreList.xml
+ClarionConfig/DictionaryOptions/
+ClarionConfig/layouts/
+ClarionConfigSQL/MenuShorcuts.xml
+ClarionConfigTPS/Clarion-tools.xml
+ClarionConfigTPS/MenuShorcuts.xml
+ClarionConfigTPS/layouts/
+
 # Clarion IDE generated config (machine-specific, may contain serial numbers)
 ClarionConfig/preferences/
 ClarionConfig/temp/
