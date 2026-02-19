@@ -8,11 +8,17 @@ config.json.backup_*
 # Temp/working files
 working-templates.txt
 
-# Clarion IDE generated config (machine-specific)
+# Clarion IDE generated config (machine-specific, may contain serial numbers)
 ClarionConfig/preferences/
 ClarionConfig/temp/
 ClarionConfig/DomPersistence/
 ClarionConfig/RecentOpen.xml
+ClarionConfig/ClarionProperties.xml
+ClarionConfig/ClarionProperties.xml.old
+ClarionConfigSQL/ClarionProperties.xml
+ClarionConfigSQL/ClarionProperties.xml.old
 ClarionConfigTPS/preferences/
 ClarionConfigTPS/DomPersistence/
 ClarionConfigTPS/RecentOpen.xml
+ClarionConfigTPS/ClarionProperties.xml
+ClarionConfigTPS/ClarionProperties.xml.old
