@@ -1,0 +1,18 @@
+# Machine-specific config (use config.example.json as template)
+config.json
+config.json.backup_*
+
+# Backup files
+*.backup_*
+
+# Temp/working files
+working-templates.txt
+
+# Clarion IDE generated config (machine-specific)
+ClarionConfig/preferences/
+ClarionConfig/temp/
+ClarionConfig/DomPersistence/
+ClarionConfig/RecentOpen.xml
+ClarionConfigTPS/preferences/
+ClarionConfigTPS/DomPersistence/
+ClarionConfigTPS/RecentOpen.xml

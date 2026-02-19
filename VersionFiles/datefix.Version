@@ -1,0 +1,34 @@
+LANGUAGE 0x0809
+
+1 VERSIONINFO
+ FILEVERSION 1,0,0,9
+ 
+ FILEFLAGSMASK 0x3FL
+ FILEFLAGS 0
+ FILEOS VOS__WINDOWS32
+ FILETYPE VFT_APP
+ FILESUBTYPE 0x0L
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "080904E4"
+      BEGIN
+        VALUE "CompanyName", "Data Design Services Ltd\0"
+        VALUE "FileDescription", "Accura remote data capture program\0"
+        VALUE "FileVersion", "1.0.0.9\0"
+        VALUE "InternalName", "rdc.exe\0"
+        VALUE "LegalCopyright", "Copyright (c) Data Design Services Ltd 2006\0"
+        VALUE "LegalTrademarks", "Accura\0"
+        VALUE "OriginalFilename", "datefix.EXE\0"
+  
+  
+        VALUE "Clarion Version", "10000\0"
+        VALUE "Template Family", "ABC\0"
+        VALUE "Template Version", "v10.0\0"
+      END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0809, 1252
+    END
+END

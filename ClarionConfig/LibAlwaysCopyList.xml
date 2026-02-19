@@ -1,0 +1,14 @@
+<AlwaysCopyList>
+  <ForceCopy company="SoftVelocity" version="1">
+    <lib name="C%V%PRLB.LIB">
+      <alsoCopy name="C%V%PRLB.dll" />
+      <alsoCopy name="c%v%run.dll" />
+    </lib>
+    <lib name="C%V%LITL.LIB">
+      <alsoCopy name="sqlite3.dll" />
+    </lib>
+    <lib name="C%V%RUNEXT.LIB">
+      <alsoCopy name="c%v%runext.dll" />
+    </lib>
+  </ForceCopy>
+</AlwaysCopyList>

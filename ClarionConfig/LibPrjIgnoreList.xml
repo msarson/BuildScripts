@@ -1,0 +1,10 @@
+<Libraries>
+  <lib name="C%V%ENC%X%" />
+  <lib name="C%V%LZWS%X%" />
+  <lib name="C%V%ZLIB%X%" />
+  <lib name="C%V%HTM%X%" />
+  <lib name="CWHH%V%" />
+  <lib name="c60prlbx" />
+  <lib name="ws2_32" />
+  <lib name="Wininet" />
+</Libraries>

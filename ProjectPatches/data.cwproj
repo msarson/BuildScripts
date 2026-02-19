@@ -1,0 +1,675 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{7DDD2DA4-D955-47E2-B061-67FD63EBC5A8}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
+    <OutputType>Library</OutputType>
+    <AssemblyName>data</AssemblyName>
+    <OutputName>data</OutputName>
+    <Model>Dll</Model>
+    <stack_size>16384</stack_size>
+    <CopyCore>True</CopyCore>
+    <DefineConstants>UseTriggers=&gt;1%3bdata_app=&gt;1%3b_BLULinkMode_=&gt;1%3bMSS_DRV=&gt;1%3bODB_DRV=&gt;0%3bSQLVersion=&gt;0%3b_OI45_=&gt;1%3b_oiLINKMODE_=&gt;0%3b_oiDllMode_=&gt;1%3b_CSPWLINKMODE_=&gt;0%3b_CSPWDLLMODE_=&gt;1%3b_oiCSVFILEExternal_=&gt;1%3bWinEventLinkMode=&gt;0%3bWinEventDLLMode=&gt;1%3b_NoSendTo_=&gt;0%3bSTWinEventHere=&gt;1%3bSTOIHere=&gt;4%3bSendToLinkMode=&gt;1%3bSendToDLLMode=&gt;0%3bNETTALKLOG=&gt;1%3b_ODDJOB_=&gt;0%3b_CRYPTONITE_=&gt;0%3b_JFILES_=&gt;0%3b_POTPDllMode_=&gt;0%3b_POTPLinkMode_=&gt;1%3b_XPTDllMode_=&gt;0%3b_XPTLinkMode_=&gt;1%3bAnyFontLM=&gt;0%3bAnyFontDM=&gt;1%3bStringTheoryLinkMode=&gt;0%3bStringTheoryDllMode=&gt;1%3b_NoCSMesBox_=&gt;0%3b_MSGThreadSafe_=&gt;1%3bCK_Base=&gt;1%3bCK_206=&gt;1%3bCK_216=&gt;1%3b_POOBDllMode_=&gt;0%3b_POOBLinkMode_=&gt;1%3b_RASLinkMode_=&gt;0%3b_RASDllMode_=&gt;1%3bDrawLinkMode=&gt;0%3bDrawDllMode=&gt;1%3b_DRAW_=&gt;1%3bDrawImage=&gt;0%3bHyperLM=&gt;0%3bHyperDM=&gt;1%3bNYSTplHlprLM=&gt;0%3bNYSTplHlprDM=&gt;1%3b_ULTRATREEDllMode_=&gt;0%3b_ULTRATREELinkMode_=&gt;1%3b_UltraTreeCellTipSupport_=&gt;1%3b_PTBDllMode_=&gt;0%3b_PTBLinkMode_=&gt;1%3bxFilesLinkMode=&gt;0%3bxFilesDllMode=&gt;1%3b_XFILES_=&gt;1%3b_ABCDllMode_=&gt;0%3b_ABCLinkMode_=&gt;1%3b_ITUtilDllMode_=&gt;0%3b_ITUtilLinkMode_=&gt;1%3b_NetTalkDllMode_=&gt;0%3b_NetTalkLinkMode_=&gt;1%3b_PDTPDllMode_=&gt;0%3b_PDTPLinkMode_=&gt;1%3b_SUPERBROWSEDllMode_=&gt;0%3b_SUPERBROWSELinkMode_=&gt;1%3b_SUPERDDDllMode_=&gt;0%3b_SUPERDDLinkMode_=&gt;1%3b_SUPEREIPDllMode_=&gt;0%3b_SUPEREIPLinkMode_=&gt;1%3b_SUPERIMPEXPDllMode_=&gt;0%3b_SUPERIMPEXPLinkMode_=&gt;1%3b_SUPERINVOICEDllMode_=&gt;0%3b_SUPERINVOICELinkMode_=&gt;1%3b_SUPERSECURITYDllMode_=&gt;0%3b_SUPERSECURITYLinkMode_=&gt;1%3b_SUPERSTUFFDllMode_=&gt;0%3b_SUPERSTUFFLinkMode_=&gt;1%3b_SUPERSYNCDllMode_=&gt;0%3b_SUPERSYNCLinkMode_=&gt;1%3b_SUPERTAGGINGDllMode_=&gt;0%3b_SUPERTAGGINGLinkMode_=&gt;1%3b_SUPERTRANSACTIONDllMode_=&gt;0%3b_SUPERTRANSACTIONLinkMode_=&gt;1</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <vid>full</vid>
+    <check_stack>True</check_stack>
+    <check_index>True</check_index>
+    <warnings>on</warnings>
+    <GenerateMap>True</GenerateMap>
+    <line_numbers>False</line_numbers>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <vid>off</vid>
+    <check_stack>False</check_stack>
+    <check_index>False</check_index>
+    <GenerateMap>True</GenerateMap>
+    <line_numbers>False</line_numbers>
+    <warnings>on</warnings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Library Include="alarm.ico" />
+    <Library Include="ARptDex.LIB" />
+    <Library Include="Attach1.ico" />
+    <Library Include="BOXCHECK.ICO" />
+    <Library Include="BOXEMPTY.ICO" />
+    <Library Include="c%25V%25mss%25L%25.lib" />
+    <Library Include="Cancel.ico" />
+    <Library Include="CheckOff.ICO" />
+    <Library Include="CheckOffDim.ICO" />
+    <Library Include="CheckOn.ICO" />
+    <Library Include="CheckOnDim.ICO" />
+    <Library Include="CLAFE.Lib" />
+    <Library Include="clanet.lib" />
+    <Library Include="CMLL12.LIB" />
+    <Library Include="csExcel.ico" />
+    <Library Include="csWord.ico" />
+    <Library Include="CTSQW10C100%25L%25.LIB" />
+    <Library Include="data.Version" />
+    <Library Include="dwmapi.lib" />
+    <Library Include="Edit.ico" />
+    <Library Include="Email.ico" />
+    <Library Include="Failed.ico" />
+    <Library Include="Favourite.ico" />
+    <Library Include="Fax.ico" />
+    <Library Include="gdilibrary.lib" />
+    <Library Include="hand2.cur" />
+    <Library Include="IMGXCOR5.LIB" />
+    <Library Include="Inactive.ico" />
+    <Library Include="Invoice.ico" />
+    <Library Include="IQXML.LIB" />
+    <Library Include="ixclib40.lib" />
+    <Library Include="Letter.ico" />
+    <Library Include="Lightning.ico" />
+    <Library Include="LSPUZIPX.LIB" />
+    <Library Include="LSPZIPX.LIB" />
+    <Library Include="NoEntry.ico" />
+    <Library Include="NYS.ico" />
+    <Library Include="Prepay.ico" />
+    <Library Include="Primary.ico" />
+    <Library Include="PWUTIL.LIB" />
+    <Library Include="pxclib40.lib" />
+    <Library Include="RPM100a.LIB" />
+    <Library Include="Save.ico" />
+    <Library Include="Sent.ico" />
+    <Library Include="SMS.ico" />
+    <Library Include="system_close_16_dark.png" />
+    <Library Include="system_close_16_white.png" />
+    <Library Include="system_max_16_dark.png" />
+    <Library Include="system_max_16_white.png" />
+    <Library Include="system_min_16_dark.png" />
+    <Library Include="system_min_16_white.png" />
+    <Library Include="system_restore_16_dark.png" />
+    <Library Include="system_restore_16_white.png" />
+    <Library Include="TAGALL.ICO" />
+    <Library Include="TagOne.ico" />
+    <Library Include="TAPI32.LIB" />
+    <Library Include="taskxpc.ico" />
+    <Library Include="taskxpcs.ico" />
+    <Library Include="taskxpcsw.ico" />
+    <Library Include="taskxpcw.ico" />
+    <Library Include="taskxpe.ico" />
+    <Library Include="taskxpes.ico" />
+    <Library Include="taskxpesw.ico" />
+    <Library Include="taskxpew.ico" />
+    <Library Include="UNTAGALL.ICO" />
+    <Library Include="UnTagOne.ico" />
+    <Library Include="Waiting.ico" />
+    <Library Include="Web.ico" />
+    <Library Include="xcpro40.lib" />
+    <FileDriver Include="ASCII" />
+    <FileDriver Include="DOS" />
+    <FileDriver Include="MEMORY" />
+    <FileDriver Include="MSSQL" />
+    <FileDriver Include="ODBC" />
+    <FileDriver Include="TOPSPEED" />
+    <Compile Include="acctsClient_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="acctsCurrency_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="acctsDebugLogOnly_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="acctsHeader_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="acctsNominal_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="acctsSupplier_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="acctsTaxRates_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="AddListOption_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="ApplyBuffers_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="AssignBuffers_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="Autoupg_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="CompareStructure_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="ConvertImage_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="CWUtil.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="DATA%24IE.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="DATA%24SEC.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="DATA%24TAG.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="DATAGLO.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="DATA_BC.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="data_BC0.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="data_BC1.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="data_BC2.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="data_BC3.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="data_BC4.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="data_BC5.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="data_BC6.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="data_BC7.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="data_BC8.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="data_BC9.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="data_BCA.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="data_BCB.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="data_FC0.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="data_FC1.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="data_FC2.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="data_MF.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="ds_Halt_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="ds_Message_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="ds_Stop_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="EdgeInstall_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="EFOCUS.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="EmailDelivery_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="EmailDialog_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="EmailDialog_FE_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="EmailEditor_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="EmailEditor_FE_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="EmailGetData_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="EmailLoadCredentials_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="EmailMerge_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="EmailPreview_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="EmailSaveCredentials_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="EmailTest_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="EmailTokens_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="ExportMergeFields_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="FormatAddress_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="FormatDateTime_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="FrameText_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="FTP_Files_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="GetEXEName_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="GetUID_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="ImageCapture_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="ImportMergeFields_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="InvalidPath_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="LoadTables1_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="LoadTables2_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="LSZERRMG.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="LSZFUNC.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="MonthName_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="OAuth2Browser_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="ojmd5.c">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="OutputClientXML_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="OutputContactXML_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="OutputHeaderXML_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="OutputOfficeXML_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="OutputOrderXML_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="OutputQuoteXML_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="OutputSignupXML_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="OutputStockXML_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="OutputSupplierXML_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="PictureEntry_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="ProperCase_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="ResetSizes_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="ResizeImage_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="ScreenCapture_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SearchReplace_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SelectCompany_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SelectDate_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SelectRecipients_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SendEmailChilkat_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SendEmail_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SendLog_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SendSMSText_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SendTo_Email_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SendTo_File_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SendTo_FTP_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SendTo_Printer_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SendTo_Window_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SetupCompanyQ_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SetupSMSAccount_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="ShellExec_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SIE__AskPicture_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SIE__AskUserExpression_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SIE__AskUserFieldName_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SIE__BrowseJob_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SIE__SelectJob_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SIE__UpdateJob_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SpellCheck_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SplashClose_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SplashOpen_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="Splashtest_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SplitName_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__AccessState_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__BrowseAudit_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__BrowseEdit_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__BulkAccess_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__DeleteAccess_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__DenyAccess_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__FetchAccess_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__GrantAccess_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__GroupAccessState_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__Logon_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__Logon_FE_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__PurgeAudit_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__SelectAuditUser_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__SelectDoor_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__SelectGroup_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__SelectProcedure_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__SelectUser_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__SyncDisk_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__UpdateDoorGroup_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__UpdateDoor_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__UpdateProcedure_Runtime_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__UpdateUIG_Group_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SSEC__UpdateUIG_User_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="StartEmailMsg_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="StockProcess_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="StockWriteOff_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="StripCRLF_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="StripInvalid_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="StripMemo_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="StripNonAlpha_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="StripSpace_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="SyncBaseQty_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="TransferPOXML_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="TransferRFQXML_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="UpdateMergeField_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="URLEncode_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="URLFilename_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="ViewBaseQty_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="ViewMergeFields_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="WebTask_data.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <ProjectReference Include="classes.cwproj">
+      <Project>{395AA6E4-8D3A-4745-ACFC-5D47D7D1C48B}</Project>
+      <Name>classes</Name>
+      <Generated>True</Generated>
+    </ProjectReference>
+    <None Include="barcode.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="caroot.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="clafe.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="cs_libpng.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="CWHHLA.DLL">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="dh2048.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="FreeImage.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="Imgxcor5.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="libeay32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="libssl32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="msvcr120.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="pwutil.Dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="QRCodeGen.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="RPM100a.DLL">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="RPM100b.DLL">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="RPM100c.DLL">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="RPM100d.DLL">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="RPM100e.DLL">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="ssleay32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="zlib.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+    <None Include="zlibwapi.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generated>True</Generated>
+      <ProjectGenerated>True</ProjectGenerated>
+    </None>
+  </ItemGroup>
+  <Import Project="$(ClarionBinPath)\SoftVelocity.Build.Clarion.targets" />
+</Project>

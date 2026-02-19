@@ -1,0 +1,8 @@
+<SideBarConfig version="1.0">
+  <SideBar activetab="${res:SharpDevelop.SideBar.GeneralCategory}">
+    <SideTab text="${res:SharpDevelop.SideBar.GeneralCategory}" />
+    <SideTab clipboardring="true" text="${res:SharpDevelop.SideBar.ClipboardRing}">
+      <SideTabItem text="Text:*.dll = .\build" value="*.dll = .\build&#xD;&#xA;" />
+    </SideTab>
+  </SideBar>
+</SideBarConfig>

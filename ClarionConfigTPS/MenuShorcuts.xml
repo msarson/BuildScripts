@@ -1,0 +1,437 @@
+﻿<ArrayOfCommandShortcut>
+  <CommandShortcut>
+    <CodonId>NewFile</CodonId>
+    <OriginalShortcutKeys>Control|N</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>NewProject</CodonId>
+    <OriginalShortcutKeys>Control|Shift|N</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>OpenFile</CodonId>
+    <OriginalShortcutKeys>Control|O</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>AddExistingItem</CodonId>
+    <OriginalShortcutKeys>Control|Shift|Oemplus</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>OpenProject</CodonId>
+    <OriginalShortcutKeys>Control|Shift|P</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>AddProject</CodonId>
+    <OriginalShortcutKeys>Control|Shift|A</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>OpenViaRedFile</CodonId>
+    <OriginalShortcutKeys>Control|Shift|O</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>CloseFile</CodonId>
+    <OriginalShortcutKeys>Control|F4</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>CloseCombine</CodonId>
+    <OriginalShortcutKeys>Control|Shift|F4</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Reloadfile</CodonId>
+    <OriginalShortcutKeys>Shift|Control|R</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Save</CodonId>
+    <OriginalShortcutKeys>Control|S</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>SaveAll</CodonId>
+    <OriginalShortcutKeys>Control|Shift|S</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Print</CodonId>
+    <OriginalShortcutKeys>Control|P</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Undo</CodonId>
+    <OriginalShortcutKeys>Control|Z</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Redo</CodonId>
+    <OriginalShortcutKeys>Control|Y</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Cut</CodonId>
+    <OriginalShortcutKeys>Control|X</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Copy</CodonId>
+    <OriginalShortcutKeys>Control|C</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Paste</CodonId>
+    <OriginalShortcutKeys>Control|V</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>DuplicateLine</CodonId>
+    <OriginalShortcutKeys>Control|D2</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>InsertGuid</CodonId>
+    <OriginalShortcutKeys>Control|Shift|G</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>UpperCase</CodonId>
+    <OriginalShortcutKeys>Control|Shift|U</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>LowerCase</CodonId>
+    <OriginalShortcutKeys>Control|Shift|L</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>InvertCase</CodonId>
+    <OriginalShortcutKeys>Control|Oem5</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Comment</CodonId>
+    <OriginalShortcutKeys>Control|Oem2</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Uncomment</CodonId>
+    <OriginalShortcutKeys>Control|Shift|Oem2</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Indent</CodonId>
+    <OriginalShortcutKeys>Control|I</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>ToggleFolding</CodonId>
+    <OriginalShortcutKeys>Shift|Control|M</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>ToggleAllFoldings</CodonId>
+    <OriginalShortcutKeys>Shift|Control|T</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>ShowDefinitionsOnly</CodonId>
+    <OriginalShortcutKeys>Shift|Control|D</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>SelectAll</CodonId>
+    <OriginalShortcutKeys>Control|A</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>EnableCC</CodonId>
+    <OriginalShortcutKeys>Control|Alt|M</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>ClaStructureDesigner</CodonId>
+    <OriginalShortcutKeys>Control|D</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>CancelEditorMenuItem</CodonId>
+    <OriginalShortcutKeys>Control|Q</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>NextEmbed</CodonId>
+    <OriginalShortcutKeys>Control|Shift|J</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>NextFilledEmbed</CodonId>
+    <OriginalShortcutKeys>Control|J</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>PrevEmbed</CodonId>
+    <OriginalShortcutKeys>Control|Shift|B</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>PrevFilledEmbed</CodonId>
+    <OriginalShortcutKeys>Control|B</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>GenerateAndRunActive</CodonId>
+    <OriginalShortcutKeys>Control|R</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>GenerateAndMakeMenuItem</CodonId>
+    <OriginalShortcutKeys>Control|M</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>GenerateAndMakePadApplications</CodonId>
+    <OriginalShortcutKeys>Control|Shift|M</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Build</CodonId>
+    <OriginalShortcutKeys>F8</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Rebuild</CodonId>
+    <OriginalShortcutKeys>Alt|F8</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Clean</CodonId>
+    <OriginalShortcutKeys>Shift|F8</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Build project</CodonId>
+    <OriginalShortcutKeys>F9</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Rebuild project</CodonId>
+    <OriginalShortcutKeys>Alt|F9</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>NextError</CodonId>
+    <OriginalShortcutKeys>Control|E</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>PreviousError</CodonId>
+    <OriginalShortcutKeys>Control|Shift|E</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>MakeAndRunAllApplicationsMenuItem</CodonId>
+    <OriginalShortcutKeys>Control|Shift|R</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>MakeAndRunAllApplicationsDebuggerMenuItem</CodonId>
+    <OriginalShortcutKeys>Control|Shift|D</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Run</CodonId>
+    <OriginalShortcutKeys>F5</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>RunWithoutDebugger</CodonId>
+    <OriginalShortcutKeys>Control|F5</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Break</CodonId>
+    <OriginalShortcutKeys>Control|Alt|B</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Continue</CodonId>
+    <OriginalShortcutKeys>F6</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Step over</CodonId>
+    <OriginalShortcutKeys>F10</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Step into</CodonId>
+    <OriginalShortcutKeys>F11</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Step out</CodonId>
+    <OriginalShortcutKeys>Shift|F11</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Toggle Breakpoint</CodonId>
+    <OriginalShortcutKeys>F7</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>DCTFind</CodonId>
+    <OriginalShortcutKeys>Control|D</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Find</CodonId>
+    <OriginalShortcutKeys>Control|F</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>FindNext</CodonId>
+    <OriginalShortcutKeys>F3</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>FindNextSelected</CodonId>
+    <OriginalShortcutKeys>Control|F3</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>Replace</CodonId>
+    <OriginalShortcutKeys>Control|R</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>SearchIncremental</CodonId>
+    <OriginalShortcutKeys>Control|L</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>SearchReverseIncremental</CodonId>
+    <OriginalShortcutKeys>Control|Shift|L</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>ToggleBookmark</CodonId>
+    <OriginalShortcutKeys>Control|F2</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>PrevBookmark</CodonId>
+    <OriginalShortcutKeys>Alt|F2</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>NextBookmark</CodonId>
+    <OriginalShortcutKeys>F2</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>GotoLineNr</CodonId>
+    <OriginalShortcutKeys>Control|G</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>GotoType</CodonId>
+    <OriginalShortcutKeys>Control|T</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>GotoBrace</CodonId>
+    <OriginalShortcutKeys>Control|Alt|B</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>WindowPreview</CodonId>
+    <OriginalShortcutKeys>Control|Shift|V</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>ApplicationMainWindowControlTemplateUtilityCommand</CodonId>
+    <OriginalShortcutKeys>Control|U</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>ValidateXml</CodonId>
+    <OriginalShortcutKeys>Control|Shift|V</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>RunTransform</CodonId>
+    <OriginalShortcutKeys>Control|Shift|T</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>GenerateCodeAction</CodonId>
+    <OriginalShortcutKeys>Alt|Insert</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>ShowQuickHelp</CodonId>
+    <OriginalShortcutKeys>Control|Shift|Q</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>NavigateNextWindow</CodonId>
+    <OriginalShortcutKeys>Control|F6</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>NavigatePrevWindow</CodonId>
+    <OriginalShortcutKeys>Shift|Control|F6</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>ClarionHelp</CodonId>
+    <OriginalShortcutKeys>Alt|F1</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>ClarionContextHelp</CodonId>
+    <OriginalShortcutKeys>F1</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>DynamicHelpPadCommand</CodonId>
+    <OriginalShortcutKeys>Control|F1</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>TocPadCommand</CodonId>
+    <OriginalShortcutKeys>Control|Alt|F1</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>IndexPadCommand</CodonId>
+    <OriginalShortcutKeys>Control|Alt|F2</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>SearchPadCommand</CodonId>
+    <OriginalShortcutKeys>Control|Alt|F3</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>IndexResultsPadCommand</CodonId>
+    <OriginalShortcutKeys>Shift|Alt|F2</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>CommentCmd</CodonId>
+    <OriginalShortcutKeys>Control|Oem2</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+  <CommandShortcut>
+    <CodonId>UncommentCmd</CodonId>
+    <OriginalShortcutKeys>Control|Shift|Oem2</OriginalShortcutKeys>
+    <NewShortcutKeys />
+  </CommandShortcut>
+</ArrayOfCommandShortcut>

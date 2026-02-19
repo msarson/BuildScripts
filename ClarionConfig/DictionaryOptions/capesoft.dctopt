@@ -1,0 +1,220 @@
+<DictionaryOptions 
+  name   = "CapeSoft Options"
+  author = "CapeSoft"
+  url    = "www.capesoft.com"
+  description = "Default options for configuring dictionaries for use with CapeSoft templates"
+ >
+  <!-- It is recommended that you create groups for your options with the outer group being the company name
+       The next level being the product/template chain and any inner groups grouping options within the
+       product/template -->
+  <Dictionary>
+    <Group display = "CapeSoft">
+      <Group display = "FM3">
+        <Item
+          name = "DctMasterFields"
+          display = "DctMasterFields: (SQL) If 1 then the dictionary is the Master of the file fields"
+          type = "Boolean"
+          description = "(SQL) If 1 then the dictionary is the Master of the file fields, and extra fields on the server side are removed."
+        />
+	    <Item
+          name = "DctMasterKeys"
+          display = "DctMasterKeys:  (SQL) If 1 then the dictionary is the Master of the file keys"
+          type = "Boolean"
+          description = "(SQL) If 1 then the dictionary is the Master of the file keys, and extra keys on the server side are removed."
+        />
+        <Item
+          name = "ZeroNull"
+          display = "ZeroNull: (SQL) Convert 0 to Null when TPS to SQL"
+          type = "Boolean"
+          description = "Converts 0, and blank strings to a NULL value in the server when converting from ISAM"
+        />
+        <Item
+          name = "DisableUniqueKeyNameCheck"
+          display = "DisableUniqueKeyNameCheck: (SQL) Suppresses the warning of duplicate (external) key names."
+          type = "Boolean"
+          description = "Suppresses the warning of duplicate (external) key names."
+        />		
+      </Group>
+	</Group>	  
+  </Dictionary>  	   
+  <File>
+    <Group display = "CapeSoft">
+      <Group display = "NetTalk">
+        <Item
+          name = "NOSYNC"
+          display = "Do Not Sync this Table"
+          type = "Boolean"
+          description = ""
+        />
+      </Group>
+      <Group display = "FM3">
+        <Item
+          name = "Version"
+          display = "Version: File version number"
+          type = "Number"
+          description = "Each time the file is changed, this value should be incremented by 1. Do not reset to a smaller number."
+		  default = "1"
+        />
+        <Item
+          name = "OldName"
+          display = "OldName: Old name for the table"
+          type = "String"
+          description = "Contains the old 'on disk' file name for the table. Used when file _name_ (not label) changes."
+        />
+        <Item
+          name = "OldName2"
+          display = "OldName2: Another Old name for the table"
+          type = "String"
+          description = "Contains the old 'on disk' file name for the table. Used when file _name_ (not label) changes."
+        />
+        <Item
+          name = "OldName3"
+          display = "OldName3: Yet another Old name for the table"
+          type = "String"
+          description = "Contains the old 'on disk' file name for the table. Used when file _name_ (not label) changes."
+        />
+        <Item
+          name = "OldPrefix"
+          display = "OldPrefix: Old prefix for the table"
+          type = "String"
+          description = "Contains the old prefix for the table. Used when file prefix changes."
+        />
+        <Item
+          name = "OldOwner"
+          display = "OldOwner: Old owner for the table"
+          type = "String"
+          description = "This is an Oracle Specific User option, and it sets the TableSpace for your oracle TABLES. This is a DICTIONARY or FILE Level user option of String type."
+        />		
+        <Item
+          name = "TableSpace"
+          display = "TableSpace: TableSpace for your oracle TABLES"
+          type = "String"
+          description = "Contains the old prefix for the table. Used when file prefix changes."
+        />				
+        <Item
+          name = "IgnoreDriver"
+          display = "IgnoreDriver: Ignore the driver when upgrading"
+          type = "Boolean"
+          description = "This option is used when converting Clarion DAT files to TPS."
+        />				
+		<Item
+          name = "FM3IGNORE"
+          display = "FM3IGNORE: FM3 will not manage this file at all."
+          type = "Boolean"
+          description = "This FILE Level user option tells FM3 to categorically ignore the file"
+        />				
+		<Item
+          name = "DCTMasterFields"
+          display = "DCTMasterFields: Make backend match the fields in the dct to the database"
+          type = "Boolean"
+          description = "This FILE Level user option tells FM3 to match the fields in the SQL table to the dct. This means that additional fields will be removed, and larger strings will be resized to the size in the dct."
+        />				
+		<Item
+          name = "DctMasterKeys"
+          display = "DctMasterKeys: Make backend match the Keys in the dct to the database."
+          type = "Boolean"
+          description = "This FILE Level user option tells FM3 to match the keys in the SQL table to the dct. This means that additional keys will be removed, and all keys in the dct (even non-unique ones) will be added to the table."
+        />				
+        <Item
+          name = "ZeroNull"
+          display = "ZeroNull: Convert 0 to Null when converting TPS to SQL"
+          type = "Boolean"
+          description = "This FILE Level user option tells FM3 to convert 0, and blank strings to a NULL value in the server when converting from ISAM"
+        />
+      </Group>    
+      <Group display = "RightReports">
+        <Item
+          name = "NoReports"
+          display = "NoReports: Don't allow this particular table to be included in the tables to be reported on"
+          type = "Boolean"
+          description = ""
+        />
+      </Group>
+      <Group display = "Multi-Proj">
+        <Item
+          name = "FIXDRIVER"
+          display = "FIXDRIVER: Disable Multi-Proj driver substitution for this file"
+          type = "String"
+          description = "Use the name of the driver to fix to"
+        />
+      </Group>
+      <Group display = "Replicate">
+        <Item
+          name = "RepSuppress"
+          display = "RepSuppress: Don't allow this particular table to be replicated "
+          type = "Boolean"
+          description = ""
+        />
+      </Group>
+    </Group>
+  </File>
+  <Field>
+    <Group display = "CapeSoft">
+      <Group display = "RightReports">
+        <Item
+          name = "RRName"
+          display = "RRName: A report friendly name that your users will use when they create reports"
+          type = "String"
+          description = ""
+        />
+      </Group>
+      <Group display = "FM3">
+        <Item
+          name = "SetIfNew"
+          display = "SetIfNew: Default value for the field when added to the table"
+          type = "String"
+          description = "If FM3 adds the field to the table, it will be primed with this value. Use AutoNumber if this is an auto number field."
+        />
+        <Item
+          name = "OldName"
+          display = "OldName: Old name for the field"
+          type = "String"
+          description = "Contains the old field name for the field. Include the prefix in the name."
+        />		
+        <Item
+          name = "AutoNumber"
+          display = "AutoNumber: Create the autonumber support on the SQL backend."
+          type = "String"
+          description = "Used in conjunction with IsIdentity (a Clarion user option to tell Clarion to add the necessary code in your application). Syntax is [incrementby] or [start],[incrementby]."
+        />		
+        <Item
+          name = "ForceSQLDataType"
+          display = "ForceSQLDataType: Force FM3 to create a particular field on the backend of a particular type"
+          type = "String"
+          description = ""
+        />		
+        <Item
+          name = "CaseSensitive"
+          display = "CaseSensitive: Force FM3 (for SQL) to create a particular field on the backend collated with case sensitivity on or off"
+          type = "Boolean"
+          description = ""
+        />		
+        <Item
+          name = "ZeroNull"
+          display = "ZeroNull: Convert 0 to Null when converting TPS to SQL for this field"
+          type = "Boolean"
+          description = "This FIELD Level user option tells FM3 to convert 0, and blank strings to a NULL value in the server when converting from ISAM"
+        />
+      </Group>
+    </Group>
+  </Field>
+  <Key>
+    <Group display = "CapeSoft">
+      <Group display = "FM3">
+        <Item
+          name = "DctMasterKey"
+          display = "DctMasterKey: Make backend match this Key in the dct to the database."
+          type = "Boolean"
+          description = ""
+        />
+        <Item
+          name = "IgnoreDuplicates"
+          display = "IgnoreDuplicates: Don't warn when duplicate key will occur, simply discard the record."
+          type = "Boolean"
+          description = ""
+        />
+      </Group>
+    </Group>
+  </Key>
+</DictionaryOptions>
+

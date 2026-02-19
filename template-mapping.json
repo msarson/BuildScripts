@@ -1,0 +1,768 @@
+[
+  {
+    "directory": "template\\win",
+    "templates": [
+      {
+        "name": "ABC",
+        "file": "ABCHAIN.TPL"
+      },
+      {
+        "name": "ABC_ADO",
+        "file": "svabado.tpl"
+      },
+      {
+        "name": "ABCWIZARDS",
+        "file": "ABWIZARD.TPL"
+      },
+      {
+        "name": "C60Cr8",
+        "file": "C60CR8.TPL"
+      },
+      {
+        "name": "Clarion",
+        "file": "CW.TPL"
+      },
+      {
+        "name": "cwVersionRes",
+        "file": "versionres.tpl"
+      },
+      {
+        "name": "DYNADRV",
+        "file": "dynadrv.tpl"
+      },
+      {
+        "name": "Finance",
+        "file": "FINANCE.TPL"
+      },
+      {
+        "name": "H5Web",
+        "file": "H5.TPL"
+      },
+      {
+        "name": "InMemoryCachedTable",
+        "file": "MemTable.tpl"
+      },
+      {
+        "name": "Internet",
+        "file": "ICONNECT.TPL"
+      },
+      {
+        "name": "IPDRV",
+        "file": "IPDRV.TPL"
+      },
+      {
+        "name": "IPServer",
+        "file": "ipserver.tpl"
+      },
+      {
+        "name": "IPServerInMemoryCachedTable",
+        "file": "IPMemTable.tpl"
+      },
+      {
+        "name": "Messaging",
+        "file": "abmail.tpl"
+      },
+      {
+        "name": "Statistics",
+        "file": "STATISTC.TPL"
+      },
+      {
+        "name": "SVBusinessRules",
+        "file": "rulesman.tpl"
+      },
+      {
+        "name": "SVCommunicationSupport",
+        "file": "ClaTalk.TPL"
+      },
+      {
+        "name": "SVGraph",
+        "file": "svgraph.tpl"
+      },
+      {
+        "name": "SVMultiChildRelationTree",
+        "file": "MCRTREE.TPL"
+      },
+      {
+        "name": "SVQuickAppConnectSupport",
+        "file": "ClaSocket.TPL"
+      },
+      {
+        "name": "SVReportToHTMLSupport",
+        "file": "rtarhtml.tpl"
+      },
+      {
+        "name": "SVReportToPDFSupport",
+        "file": "rtarpdf.tpl"
+      },
+      {
+        "name": "SVReportToTXTSupport",
+        "file": "rtartxt.tpl"
+      },
+      {
+        "name": "SVReportToXMLSupport",
+        "file": "rtarxml.tpl"
+      },
+      {
+        "name": "Web",
+        "file": "wbmain.tpl"
+      },
+      {
+        "name": "Wizards",
+        "file": "WIZARD.TPL"
+      }
+    ]
+  },
+  {
+    "directory": "accessory\\template\\win",
+    "templates": [
+      {
+        "name": "ABCDefaults",
+        "file": "ABCDefaults.tpl"
+      },
+      {
+        "name": "ABCFree",
+        "file": "VSABCTPL.TPL"
+      },
+      {
+        "name": "ABCFreeClasses",
+        "file": "VSABCCLS.TPL"
+      },
+      {
+        "name": "ABCRptDes",
+        "file": "Abrptdes.tpl"
+      },
+      {
+        "name": "Allerup",
+        "file": "Allerup.tpl"
+      },
+      {
+        "name": "AnyFont",
+        "file": "anyfont.tpl"
+      },
+      {
+        "name": "AppAssist",
+        "file": "appasst.tpl"
+      },
+      {
+        "name": "BDT",
+        "file": "BDT.tpl"
+      },
+      {
+        "name": "BST",
+        "file": "BST.tpl"
+      },
+      {
+        "name": "CapeSoftGPF",
+        "file": "csGPF.tpl"
+      },
+      {
+        "name": "CBAltFix",
+        "file": "CBAltWin7Fix.tpl"
+      },
+      {
+        "name": "ChromeExplorer",
+        "file": "ChromeExplorer.tpl"
+      },
+      {
+        "name": "CrossTabWizard",
+        "file": "CTSCW10CLA.tpl"
+      },
+      {
+        "name": "CrossTabWizardABC",
+        "file": "CTSCW10ABC.tpl"
+      },
+      {
+        "name": "Cryptonite",
+        "file": "Cryptonite.tpl"
+      },
+      {
+        "name": "CSMesBox",
+        "file": "MessageBox.TPL"
+      },
+      {
+        "name": "CTSMain",
+        "file": "CTSMAIN.tpl"
+      },
+      {
+        "name": "DDS_AccountsLinkTpl",
+        "file": "ddsAccountsLink.tpl"
+      },
+      {
+        "name": "DDS_CarriersLinkTpl",
+        "file": "ddsCarriersLink.tpl"
+      },
+      {
+        "name": "DDSUpgAssist",
+        "file": "ddsupg.tpl"
+      },
+      {
+        "name": "DirectQuery",
+        "file": "DirectQuery.tpl"
+      },
+      {
+        "name": "DPIAwareFixTpl",
+        "file": "dpiAwareFix.tpl"
+      },
+      {
+        "name": "Draw",
+        "file": "DRAW.TPL"
+      },
+      {
+        "name": "Easy3DStyle",
+        "file": "Easy3DStyle.tpl"
+      },
+      {
+        "name": "EasyAutoEntry",
+        "file": "EasyAutoEntry.tpl"
+      },
+      {
+        "name": "EasyComTemplate",
+        "file": "easycom.tpl"
+      },
+      {
+        "name": "EasyEdge",
+        "file": "EasyEdgeChromium.tpl"
+      },
+      {
+        "name": "EasyResizeAndSplit",
+        "file": "ResizeAndSplit.tpl"
+      },
+      {
+        "name": "eZHelp",
+        "file": "EzHelp.tpl"
+      },
+      {
+        "name": "Fastmem",
+        "file": "fastmem.tpl"
+      },
+      {
+        "name": "FileExplorer",
+        "file": "fe.tpl"
+      },
+      {
+        "name": "fm3",
+        "file": "FM3.TPL"
+      },
+      {
+        "name": "G_CALC",
+        "file": "NYS_GCalc.tpl"
+      },
+      {
+        "name": "G_MEDIA",
+        "file": "NYS_GMedia.tpl"
+      },
+      {
+        "name": "G_VisualsTpl",
+        "file": "NYS_GVisuals.tpl"
+      },
+      {
+        "name": "HotDates",
+        "file": "HotDates.tpl"
+      },
+      {
+        "name": "HyperActive",
+        "file": "hyperactive.tpl"
+      },
+      {
+        "name": "IcetipsPreviewer",
+        "file": "ITPreview.tpl"
+      },
+      {
+        "name": "IcetipsUtilityTemplate",
+        "file": "ITUtility.tpl"
+      },
+      {
+        "name": "IcetipsWindowFixer",
+        "file": "ITWinFix.tpl"
+      },
+      {
+        "name": "IcetipsWinWizard",
+        "file": "ITWinWiz.tpl"
+      },
+      {
+        "name": "ImageExABC",
+        "file": "imgx_abc.tpl"
+      },
+      {
+        "name": "ImageExLegacy",
+        "file": "imgx_leg.tpl"
+      },
+      {
+        "name": "Insight",
+        "file": "INSIGHT.TPL"
+      },
+      {
+        "name": "iQXML_Parser_Writer",
+        "file": "iQXml.tpl"
+      },
+      {
+        "name": "ITMagicButtons",
+        "file": "ITMagicButtons.tpl"
+      },
+      {
+        "name": "ITMagicButtonsLegacy",
+        "file": "ITMagicButtonsC.tpl"
+      },
+      {
+        "name": "ITMagicEntries",
+        "file": "ITMagicEntries.tpl"
+      },
+      {
+        "name": "ITMagicEntriesClarion",
+        "file": "ITMagicEntriesC.tpl"
+      },
+      {
+        "name": "ITMagicLocks",
+        "file": "ITMagicLocksABC.tpl"
+      },
+      {
+        "name": "jFiles",
+        "file": "jFiles.TPL"
+      },
+      {
+        "name": "JNDSplitBarTemplate",
+        "file": "jndsplit.tpl"
+      },
+      {
+        "name": "KCR_OleDragDrop",
+        "file": "OLEDRAGDROP.TPL"
+      },
+      {
+        "name": "KeepingTabs",
+        "file": "KeepingTabs.tpl"
+      },
+      {
+        "name": "ListAndLabel",
+        "file": "listlabel.tpl"
+      },
+      {
+        "name": "Lodestar_NCR",
+        "file": "ncr_abc.tpl"
+      },
+      {
+        "name": "Lodestar_RPM",
+        "file": "RPM_ABC.TPL"
+      },
+      {
+        "name": "Lodestar_RPMdd",
+        "file": "RPM_DD.TPL"
+      },
+      {
+        "name": "LSZip_2X",
+        "file": "Lszglo.tpl"
+      },
+      {
+        "name": "LSZipLibrary",
+        "file": "Alszglo.tpl"
+      },
+      {
+        "name": "Makeover",
+        "file": "makeover.tpl"
+      },
+      {
+        "name": "MAPI",
+        "file": "Mapitpl.tpl"
+      },
+      {
+        "name": "MaxQueue",
+        "file": "MaxQueue.Tpl"
+      },
+      {
+        "name": "MikeHanson",
+        "file": "stcm_stf.tpl"
+      },
+      {
+        "name": "MikeHansonABC",
+        "file": "stam_stf.tpl"
+      },
+      {
+        "name": "MultiPrj",
+        "file": "MULTIPRJ.TPL"
+      },
+      {
+        "name": "MyTable",
+        "file": "mytable.tpl"
+      },
+      {
+        "name": "NetTalk",
+        "file": "NETTALK.TPL"
+      },
+      {
+        "name": "NetTalkWizards",
+        "file": "ntwiz.tpl"
+      },
+      {
+        "name": "NinjaDonutHoles",
+        "file": "NinjaDonutHoles.tpl"
+      },
+      {
+        "name": "NYS_CalendarPro",
+        "file": "NYS_CalendarPro.tpl"
+      },
+      {
+        "name": "NYS_ChartProTpl",
+        "file": "NYS_ChartPro.tpl"
+      },
+      {
+        "name": "NYS_ChilkatTpl",
+        "file": "NYS_Chilkat.tpl"
+      },
+      {
+        "name": "NYS_CommandBarsTpl",
+        "file": "NYS_CommandBars.tpl"
+      },
+      {
+        "name": "NYS_DevExtremeTpl",
+        "file": "NYS_DevExtreme.tpl"
+      },
+      {
+        "name": "NYS_DockingPaneTpl",
+        "file": "NYS_DockingPane.tpl"
+      },
+      {
+        "name": "NYS_FlowGraphTpl",
+        "file": "NYS_FlowGraph.tpl"
+      },
+      {
+        "name": "NYS_HtmlEditorTpl",
+        "file": "NYS_HtmlEditor.tpl"
+      },
+      {
+        "name": "NYS_MarkupTpl",
+        "file": "NYS_Markup.tpl"
+      },
+      {
+        "name": "NYS_PDFTpl",
+        "file": "NYS_Pdf.tpl"
+      },
+      {
+        "name": "NYS_PropertyGridTpl",
+        "file": "NYS_PropertyGrid.tpl"
+      },
+      {
+        "name": "NYS_ReportControl",
+        "file": "NYS_ReportControl.tpl"
+      },
+      {
+        "name": "NYS_ShortcutBarTpl",
+        "file": "NYS_ShortcutBar.tpl"
+      },
+      {
+        "name": "NYS_SkinFrameworkTpl",
+        "file": "NYS_SkinFramework.tpl"
+      },
+      {
+        "name": "NYS_SpreadsheetTpl",
+        "file": "NYS_SpreadSheet.tpl"
+      },
+      {
+        "name": "NYS_SuiteControlsTpl",
+        "file": "NYS_SuiteControls.tpl"
+      },
+      {
+        "name": "NYS_SyntaxEditTpl",
+        "file": "NYS_SyntaxEdit.tpl"
+      },
+      {
+        "name": "NYS_TaskPanelTpl",
+        "file": "NYS_TaskPanel.tpl"
+      },
+      {
+        "name": "NYS_TemplateHelperTpl",
+        "file": "NYS_TemplateHelper.tpl"
+      },
+      {
+        "name": "NYS_UtilsTpl",
+        "file": "NYS_Utils.tpl"
+      },
+      {
+        "name": "NYS_WordProcessorTpl",
+        "file": "NYS_WordProcessor.tpl"
+      },
+      {
+        "name": "OddJob",
+        "file": "OddJob.tpl"
+      },
+      {
+        "name": "OfficeInside",
+        "file": "office.tpl"
+      },
+      {
+        "name": "OfficeTemplates",
+        "file": "aboffice5.tpl"
+      },
+      {
+        "name": "PDFXTools41",
+        "file": "pdftls41.tpl"
+      },
+      {
+        "name": "PDTP",
+        "file": "PDTP.TPL"
+      },
+      {
+        "name": "PDTPCustomization",
+        "file": "TPCus.tpl"
+      },
+      {
+        "name": "POOutlook",
+        "file": "PoOutlookBar.tpl"
+      },
+      {
+        "name": "PostEventTemplate",
+        "file": "postev.tpl"
+      },
+      {
+        "name": "PowerToolbar",
+        "file": "potoolbar.tpl"
+      },
+      {
+        "name": "POXPControls",
+        "file": "PoXPtask.tpl"
+      },
+      {
+        "name": "POXPControlsCW",
+        "file": "PoXPtaskCW.tpl"
+      },
+      {
+        "name": "Progress",
+        "file": "PROGRESS.TPL"
+      },
+      {
+        "name": "Reflection",
+        "file": "Reflection.Tpl"
+      },
+      {
+        "name": "Replicate",
+        "file": "replicate.tpl"
+      },
+      {
+        "name": "ReportDesignerOnly",
+        "file": "RptDesPr.tpl"
+      },
+      {
+        "name": "ReportWizard",
+        "file": "CTSRW10CLA.tpl"
+      },
+      {
+        "name": "ReportWizardABC",
+        "file": "CTSRW10ABC.tpl"
+      },
+      {
+        "name": "RptDes",
+        "file": "arptdes.tpl"
+      },
+      {
+        "name": "SelfService",
+        "file": "SelfService.tpl"
+      },
+      {
+        "name": "SendTo",
+        "file": "sendto.tpl"
+      },
+      {
+        "name": "SpreadsheetWizard",
+        "file": "CTSSW10CLA.tpl"
+      },
+      {
+        "name": "SpreadsheetWizardABC",
+        "file": "CTSSW10ABC.tpl"
+      },
+      {
+        "name": "SQLQWAddOn",
+        "file": "SQLQWADDON.TPL"
+      },
+      {
+        "name": "StringTheory",
+        "file": "StringTheory.tpl"
+      },
+      {
+        "name": "SuperBrowse",
+        "file": "stcl_brw.tpl"
+      },
+      {
+        "name": "SuperBrowseABC",
+        "file": "stab_brw.tpl"
+      },
+      {
+        "name": "SuperImportExport",
+        "file": "stcl_ie.tpl"
+      },
+      {
+        "name": "SuperImportExportABC",
+        "file": "stab_ie.tpl"
+      },
+      {
+        "name": "SuperInvoice",
+        "file": "stcl_inv.tpl"
+      },
+      {
+        "name": "SuperInvoiceABC",
+        "file": "stab_inv.tpl"
+      },
+      {
+        "name": "SuperQBE",
+        "file": "stcl_qbe.tpl"
+      },
+      {
+        "name": "SuperQbeABC",
+        "file": "stab_qbe.tpl"
+      },
+      {
+        "name": "SuperSecurity",
+        "file": "stcl_sec.tpl"
+      },
+      {
+        "name": "SuperSecurityABC",
+        "file": "stab_sec.tpl"
+      },
+      {
+        "name": "SuperTagging",
+        "file": "stcl_tag.tpl"
+      },
+      {
+        "name": "SuperTaggingABC",
+        "file": "stab_tag.tpl"
+      },
+      {
+        "name": "TearOff",
+        "file": "tearoff.tpl"
+      },
+      {
+        "name": "TemplateVersionTracker",
+        "file": "TemplateVersion.tpl"
+      },
+      {
+        "name": "Ticker",
+        "file": "ticker.tpl"
+      },
+      {
+        "name": "TimeSavers",
+        "file": "TIMESAVR.TPL"
+      },
+      {
+        "name": "ToolCraft_QueryWizard",
+        "file": "CTSQW10CLA.tpl"
+      },
+      {
+        "name": "ToolCraft_QueryWizard_ABC",
+        "file": "CTSQW10ABC.tpl"
+      },
+      {
+        "name": "TPLegacy",
+        "file": "TPLEGACY.TPL"
+      },
+      {
+        "name": "TPPic",
+        "file": "PDTPPic.Tpl"
+      },
+      {
+        "name": "TPTextGlobal",
+        "file": "TPTEXT.TPL"
+      },
+      {
+        "name": "Translate",
+        "file": "translate.tpl"
+      },
+      {
+        "name": "TSPBlobManagerTPL",
+        "file": "blobmgr.tpl"
+      },
+      {
+        "name": "UltimateClass",
+        "file": "UltimateClass.tpl"
+      },
+      {
+        "name": "UltimateDebug",
+        "file": "UltimateDebug.tpl"
+      },
+      {
+        "name": "UltimateNotify",
+        "file": "UltimateNotify.tpl"
+      },
+      {
+        "name": "UltimatePlaceholder",
+        "file": "UltimatePlaceHolder.Tpl"
+      },
+      {
+        "name": "UltimateSQL",
+        "file": "UltimateSQL.tpl"
+      },
+      {
+        "name": "UltimateVersion",
+        "file": "UltimateVersion.tpl"
+      },
+      {
+        "name": "UltraC4",
+        "file": "utabc60.tpl"
+      },
+      {
+        "name": "UltraTreeDemoSupport",
+        "file": "utdemo.tpl"
+      },
+      {
+        "name": "UpperParkSolutionsVC",
+        "file": "UP_VC_Interface.tpl"
+      },
+      {
+        "name": "UTARNG",
+        "file": "utxcols.tpl"
+      },
+      {
+        "name": "UTDrag",
+        "file": "utdrag.tpl"
+      },
+      {
+        "name": "UTRXRM",
+        "file": "utrxrm.tpl"
+      },
+      {
+        "name": "UTStyle",
+        "file": "UTStyles.tpl"
+      },
+      {
+        "name": "UTTag",
+        "file": "uttag.tpl"
+      },
+      {
+        "name": "UtUtil",
+        "file": "ututil.tpl"
+      },
+      {
+        "name": "UTWIZ",
+        "file": "utwiz.tpl"
+      },
+      {
+        "name": "ViewWizard",
+        "file": "CTSVW10CLA.tpl"
+      },
+      {
+        "name": "ViewWizardABC",
+        "file": "CTSVW10ABC.tpl"
+      },
+      {
+        "name": "wdMailMerge",
+        "file": "wdMailMerge.tpl"
+      },
+      {
+        "name": "WebMon",
+        "file": "webmon.tpl"
+      },
+      {
+        "name": "WinEvent",
+        "file": "WINEVENT.TPL"
+      },
+      {
+        "name": "xFiles",
+        "file": "XFILES.TPL"
+      },
+      {
+        "name": "XploreOOP",
+        "file": "XPLORE.TPL"
+      },
+      {
+        "name": "XPTheme",
+        "file": "xptheme.tpl"
+      }
+    ]
+  }
+]
