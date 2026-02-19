@@ -435,7 +435,7 @@ if ($GenerateOnly -or $GenerateBuild) {
             $configDir = "C:\BuildScripts\ClarionConfig"
             
             $genProcess = Start-Process -FilePath $clarionCL `
-                -ArgumentList "/ConfigDir", "`"$configDir`"", "/win", "/ag", "`"$($app.AppFile)`"" `
+                -ArgumentList "/ConfigDir", "`"$configDir`"", "/win", "/rs", $Configuration, "/ag", "`"$($app.AppFile)`"" `
                 -WorkingDirectory $solutionDir `
                 -NoNewWindow `
                 -Wait `
@@ -564,6 +564,19 @@ if ($BuildOnly -or $GenerateBuild) {
     Write-Host "=============================================" -ForegroundColor Gray
     Write-Host ""
     
+    # Seed debug\exp from release\exp if debug build and debug\exp doesn't exist yet.
+    # The linker requires pre-existing .exp files for DLL projects - they are created
+    # during the first successful build and reused on subsequent builds.
+    if ($Configuration -eq 'Debug') {
+        $releaseExpDir = Join-Path $solutionDir "genfiles\release\exp"
+        $debugExpDir   = Join-Path $solutionDir "genfiles\debug\exp"
+        if ((Test-Path $releaseExpDir) -and (-not (Test-Path $debugExpDir))) {
+            Write-Host "Seeding genfiles\debug\exp from release\exp (first debug build)..." -ForegroundColor Cyan
+            New-Item -ItemType Directory -Path $debugExpDir -Force | Out-Null
+            Copy-Item "$releaseExpDir\*" $debugExpDir -Force
+        }
+    }
+
     # Determine number of passes
     $maxPasses = if ($hasCircularDeps) { 2 } else { 1 }
     
