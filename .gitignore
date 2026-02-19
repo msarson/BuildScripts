@@ -19,6 +19,7 @@ ClarionConfig/LibPrjIgnoreList.xml
 ClarionConfig/DictionaryOptions/
 ClarionConfig/layouts/
 ClarionConfigSQL/MenuShorcuts.xml
+ClarionConfigSQL/DomPersistence/
 ClarionConfigTPS/Clarion-tools.xml
 ClarionConfigTPS/MenuShorcuts.xml
 ClarionConfigTPS/layouts/
