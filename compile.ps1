@@ -380,18 +380,13 @@ if ([string]::IsNullOrEmpty($solutionDir)) {
     $solutionDir = Get-Location
 }
 
-# Deploy managed red files from BuildScripts over workspace copies.
-# These files remove the debug/release path split so all configs share
+# Deploy the managed Clarion bin red file from BuildScripts.
+# This removes the debug/release folder split so both configs share
 # common genfiles\obj, genfiles\lib, genfiles\exp etc. folders.
-$redFilesDir = "C:\BuildScripts\RedFiles"
-$accuraRed   = Join-Path $solutionDir "Clarion100.red"
+# The Accura local red is handled by build.ps1 (from BuildScripts\RedFiles\).
 $clarionBinRed = Join-Path $ClarionPath "bin\Clarion100.red"
-if (Test-Path "$redFilesDir\Clarion100_accura.red") {
-    Copy-Item "$redFilesDir\Clarion100_accura.red" $accuraRed -Force
-    Write-Info "Deployed Clarion100.red to Accura workspace"
-}
-if (Test-Path "$redFilesDir\Clarion100_bin.red") {
-    Copy-Item "$redFilesDir\Clarion100_bin.red" $clarionBinRed -Force
+if (Test-Path "C:\BuildScripts\RedFiles\Clarion100_bin.red") {
+    Copy-Item "C:\BuildScripts\RedFiles\Clarion100_bin.red" $clarionBinRed -Force
     Write-Info "Deployed Clarion100.red to Clarion bin"
 }
 

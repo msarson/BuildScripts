@@ -617,7 +617,11 @@ if ($Mode) {
                 Write-Success "  + Version.ini (from versions\tps\)"
             }
             
-            if (Test-Path "versions\tps\Clarion100.red") {
+            $tpsRed = "C:\BuildScripts\RedFiles\Clarion100_tps.red"
+            if (Test-Path $tpsRed) {
+                Copy-Item $tpsRed "Clarion100.red" -Force
+                Write-Success "  + Clarion100.red (from BuildScripts\RedFiles\)"
+            } elseif (Test-Path "versions\tps\Clarion100.red") {
                 Copy-Item "versions\tps\Clarion100.red" "Clarion100.red" -Force
                 Write-Success "  + Clarion100.red (from versions\tps\)"
             }
@@ -637,8 +641,12 @@ if ($Mode) {
                 Copy-Item "versions\sql\Version.ini" "Version.ini" -Force
                 Write-Success "  + Version.ini (from versions\sql\)"
             }
-            
-            if (Test-Path "versions\sql\Clarion100.red") {
+
+            $sqlRed = "C:\BuildScripts\RedFiles\Clarion100_accura.red"
+            if (Test-Path $sqlRed) {
+                Copy-Item $sqlRed "Clarion100.red" -Force
+                Write-Success "  + Clarion100.red (from BuildScripts\RedFiles\)"
+            } elseif (Test-Path "versions\sql\Clarion100.red") {
                 Copy-Item "versions\sql\Clarion100.red" "Clarion100.red" -Force
                 Write-Success "  + Clarion100.red (from versions\sql\)"
             }
