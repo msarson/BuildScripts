@@ -380,6 +380,21 @@ if ([string]::IsNullOrEmpty($solutionDir)) {
     $solutionDir = Get-Location
 }
 
+# Deploy managed red files from BuildScripts over workspace copies.
+# These files remove the debug/release path split so all configs share
+# common genfiles\obj, genfiles\lib, genfiles\exp etc. folders.
+$redFilesDir = "C:\BuildScripts\RedFiles"
+$accuraRed   = Join-Path $solutionDir "Clarion100.red"
+$clarionBinRed = Join-Path $ClarionPath "bin\Clarion100.red"
+if (Test-Path "$redFilesDir\Clarion100_accura.red") {
+    Copy-Item "$redFilesDir\Clarion100_accura.red" $accuraRed -Force
+    Write-Info "Deployed Clarion100.red to Accura workspace"
+}
+if (Test-Path "$redFilesDir\Clarion100_bin.red") {
+    Copy-Item "$redFilesDir\Clarion100_bin.red" $clarionBinRed -Force
+    Write-Info "Deployed Clarion100.red to Clarion bin"
+}
+
 # Create build-output directory if it doesn't exist
 $buildOutputDir = Join-Path $solutionDir "build-output"
 if (-not (Test-Path $buildOutputDir)) {
@@ -503,26 +518,6 @@ if ($GenerateOnly -or $GenerateBuild) {
         if ($StopOnError) {
             Write-Error-Custom "Generation had failures. Stopping."
             exit 1
-        }
-    }
-}
-
-# STEP 1.5: Copy exp files from release\exp to debug\exp
-# ClarionCL /ag always writes .exp files to release\exp regardless of /rs flag.
-# For Debug builds the linker looks in debug\exp, so we copy them across.
-if (($GenerateOnly -or $GenerateBuild) -and $Configuration -eq 'Debug') {
-    $releaseExpDir = Join-Path $solutionDir "genfiles\release\exp"
-    $debugExpDir   = Join-Path $solutionDir "genfiles\debug\exp"
-    if (Test-Path $releaseExpDir) {
-        $expFiles = Get-ChildItem -Path $releaseExpDir -Filter "*.exp" -ErrorAction SilentlyContinue
-        if ($expFiles.Count -gt 0) {
-            if (-not (Test-Path $debugExpDir)) {
-                New-Item -ItemType Directory -Path $debugExpDir -Force | Out-Null
-            }
-            foreach ($expFile in $expFiles) {
-                Copy-Item -Path $expFile.FullName -Destination $debugExpDir -Force
-            }
-            Write-Info "Copied $($expFiles.Count) .exp file(s) from release\exp to debug\exp"
         }
     }
 }
