@@ -21,7 +21,7 @@ pipeline {
             steps {
                 emailext subject: "🔨 Accura SQL Build #${BUILD_NUMBER} - Started",
                          body: "Build #${BUILD_NUMBER} has started.\n\nView progress: ${BUILD_URL}console",
-                         to: 'msarson@gmail.com'
+                         to: 'mark@marksarson.com'
             }
         }
 
@@ -88,17 +88,17 @@ pipeline {
         success {
             emailext subject: "✅ Accura SQL Build #${BUILD_NUMBER} - Success",
                      body: "Build #${BUILD_NUMBER} completed successfully.\n\nView: ${BUILD_URL}",
-                     to: 'msarson@gmail.com'
+                     to: 'mark@marksarson.com'
         }
         failure {
             emailext subject: "❌ Accura SQL Build #${BUILD_NUMBER} - FAILED",
                      body: "Build #${BUILD_NUMBER} failed.\n\nView logs: ${BUILD_URL}console",
-                     to: 'msarson@gmail.com'
+                     to: 'mark@marksarson.com'
         }
         fixed {
             emailext subject: "✅ Accura SQL Build #${BUILD_NUMBER} - Back to Normal",
                      body: "Build #${BUILD_NUMBER} is back to normal after a previous failure.\n\nView: ${BUILD_URL}",
-                     to: 'msarson@gmail.com'
+                     to: 'mark@marksarson.com'
         }
     }
 }
