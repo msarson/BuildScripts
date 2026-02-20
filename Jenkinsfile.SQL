@@ -17,6 +17,14 @@ pipeline {
     }
 
     stages {
+        stage('Notify Started') {
+            steps {
+                emailext subject: "🔨 Accura SQL Build #${BUILD_NUMBER} - Started",
+                         body: "Build #${BUILD_NUMBER} has started.\n\nView progress: ${BUILD_URL}console",
+                         to: 'msarson@gmail.com'
+            }
+        }
+
         stage('Checkout Repositories') {
             steps {
                 echo 'Checking out Accura and Clarion repositories...'
@@ -78,10 +86,19 @@ pipeline {
 
     post {
         success {
-            echo 'Build succeeded!'
+            emailext subject: "✅ Accura SQL Build #${BUILD_NUMBER} - Success",
+                     body: "Build #${BUILD_NUMBER} completed successfully.\n\nView: ${BUILD_URL}",
+                     to: 'msarson@gmail.com'
         }
         failure {
-            echo 'Build failed - check logs above'
+            emailext subject: "❌ Accura SQL Build #${BUILD_NUMBER} - FAILED",
+                     body: "Build #${BUILD_NUMBER} failed.\n\nView logs: ${BUILD_URL}console",
+                     to: 'msarson@gmail.com'
+        }
+        fixed {
+            emailext subject: "✅ Accura SQL Build #${BUILD_NUMBER} - Back to Normal",
+                     body: "Build #${BUILD_NUMBER} is back to normal after a previous failure.\n\nView: ${BUILD_URL}",
+                     to: 'msarson@gmail.com'
         }
     }
 }
