@@ -24,7 +24,9 @@ ClarionConfigTPS/Clarion-tools.xml
 ClarionConfigTPS/MenuShorcuts.xml
 ClarionConfigTPS/layouts/
 
-# Clarion IDE generated config (machine-specific, may contain serial numbers)
+# Temporary template patches (copied from Clarion repo, not committed)
+TemplatePatches/
+
 ClarionConfig/preferences/
 ClarionConfig/temp/
 ClarionConfig/DomPersistence/

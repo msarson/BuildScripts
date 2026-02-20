@@ -694,7 +694,21 @@ if ($ImportApps) {
     # Setup mode-specific Clarion configuration
     $modeConfigDir = Setup-ModeSpecificConfig -Mode $Mode -ClarionPath $clarion10Path
     Write-Info "Using config directory: $modeConfigDir"
-    
+
+    # Apply any local template patches (temporary fixes until upstream Clarion repo is corrected)
+    $templatePatchDir = "C:\BuildScripts\TemplatePatches"
+    $templateDestDir = Join-Path $clarion10Path "accessory\template\win"
+    if (Test-Path $templatePatchDir) {
+        $patches = Get-ChildItem $templatePatchDir -Filter "*.tpl"
+        if ($patches.Count -gt 0) {
+            Write-Host "`n--- Applying Template Patches ---" -ForegroundColor Magenta
+            foreach ($patch in $patches) {
+                Copy-Item $patch.FullName (Join-Path $templateDestDir $patch.Name) -Force
+                Write-Info "  + Patched $($patch.Name)"
+            }
+        }
+    }
+
     # Register all templates from mapping file
     Write-Host "`n--- Registering Templates ---" -ForegroundColor Magenta
     Register-Templates -ClarionPath $clarion10Path -ConfigDir $modeConfigDir
