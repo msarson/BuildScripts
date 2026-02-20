@@ -731,6 +731,12 @@ if ($BuildOnly -or $GenerateBuild) {
                             Write-Host "FAILED in both Debug and Release (exit code: $($releaseProcess.ExitCode))" -ForegroundColor Red
                             $failCount++
                             $failedProjects += $projectName
+                            if ($projectName -in @('classes', 'data')) {
+                                Write-Host ""
+                                Write-Host "  *** CRITICAL: $projectName failed - all other apps depend on this. Aborting build. ***" -ForegroundColor Red
+                                Write-Error-Custom "`nBuild aborted: critical project '$projectName' failed"
+                                break
+                            }
                         }
                     } else {
                         # Final pass or no circular deps - this is a real failure
@@ -761,6 +767,14 @@ if ($BuildOnly -or $GenerateBuild) {
                             }
                         }
                         
+                        # Critical projects - fail immediately regardless of other settings
+                        if ($projectName -in @('classes', 'data')) {
+                            Write-Host ""
+                            Write-Host "  *** CRITICAL: $projectName failed - all other apps depend on this. Aborting build. ***" -ForegroundColor Red
+                            Write-Error-Custom "`nBuild aborted: critical project '$projectName' failed in pass $pass"
+                            break
+                        }
+
                         # Only stop on error if not dealing with circular dependencies
                         if ($StopOnError -and -not $hasCircularDeps) {
                             Write-Error-Custom "`nStopping build due to error in $projectName"
@@ -776,6 +790,13 @@ if ($BuildOnly -or $GenerateBuild) {
                 $failCount++
                 $failedProjects += $projectName
                 
+                if ($projectName -in @('classes', 'data')) {
+                    Write-Host ""
+                    Write-Host "  *** CRITICAL: $projectName failed - all other apps depend on this. Aborting build. ***" -ForegroundColor Red
+                    Write-Error-Custom "`nBuild aborted: critical project '$projectName' failed"
+                    break
+                }
+
                 if ($StopOnError -and -not $hasCircularDeps) {
                     break
                 }
