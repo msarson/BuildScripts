@@ -162,6 +162,13 @@ function Setup-ModeSpecificConfig {
         Write-Success "  + Created $modeConfigDir (1 file, <1 second)"
     }
     
+    # Always refresh ClarionProperties.xml from base before each build to prevent
+    # ClarionCL appending to it repeatedly and causing OutOfMemoryException
+    $sourceXml = Join-Path $baseConfigDir "ClarionProperties.xml"
+    $destXml = Join-Path $modeConfigDir "ClarionProperties.xml"
+    Copy-Item $sourceXml $destXml -Force
+    Write-Info "  Refreshed ClarionProperties.xml from base config"
+    
     # Update ClarionProperties.xml with correct version path
     $propsFile = Join-Path $modeConfigDir "ClarionProperties.xml"
     
