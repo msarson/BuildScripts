@@ -145,29 +145,19 @@ function Setup-ModeSpecificConfig {
     )
     
     $baseConfigDir = "C:\BuildScripts\ClarionConfig"
-    $modeConfigDir = "C:\BuildScripts\ClarionConfig$Mode"  # ClarionConfigTPS or ClarionConfigSQL
-    
-    # Create mode-specific config directory if it doesn't exist
-    if (-not (Test-Path $modeConfigDir)) {
-        Write-Info "Creating $Mode-specific Clarion config directory..."
-        
-        # Create directory
-        New-Item -ItemType Directory -Path $modeConfigDir -Force | Out-Null
-        
-        # Copy ONLY ClarionProperties.xml (not entire directory - 45x faster!)
-        $sourceXml = Join-Path $baseConfigDir "ClarionProperties.xml"
-        $destXml = Join-Path $modeConfigDir "ClarionProperties.xml"
-        Copy-Item $sourceXml $destXml -Force
-        
-        Write-Success "  + Created $modeConfigDir (1 file, <1 second)"
+    # Put config in workspace so it's isolated per build and never shared between TPS/SQL
+    $modeConfigDir = Join-Path (Get-Location) "ClarionConfig"
+
+    # Always recreate fresh to prevent ClarionCL appending and bloating the file
+    if (Test-Path $modeConfigDir) {
+        Remove-Item $modeConfigDir -Recurse -Force
     }
-    
-    # Always refresh ClarionProperties.xml from base before each build to prevent
-    # ClarionCL appending to it repeatedly and causing OutOfMemoryException
+    New-Item -ItemType Directory -Path $modeConfigDir -Force | Out-Null
+
     $sourceXml = Join-Path $baseConfigDir "ClarionProperties.xml"
     $destXml = Join-Path $modeConfigDir "ClarionProperties.xml"
     Copy-Item $sourceXml $destXml -Force
-    Write-Info "  Refreshed ClarionProperties.xml from base config"
+    Write-Info "  Created fresh ClarionConfig in workspace"
     
     # Update ClarionProperties.xml with correct version path
     $propsFile = Join-Path $modeConfigDir "ClarionProperties.xml"
