@@ -71,15 +71,17 @@ pipeline {
 
         stage('Build TPS') {
             steps {
-                echo 'Starting Accura TPS build...'
+                lock('clarion-generator') {
+                    echo 'Acquired Clarion generator lock - starting Accura TPS build...'
 
-                dir('Accura') {
-                    powershell '''
-                        C:\\BuildScripts\\build.ps1 -Mode TPS -ImportApps -GenerateBuildAll -SkipGitOperations
-                    '''
+                    dir('Accura') {
+                        powershell '''
+                            C:\\BuildScripts\\build.ps1 -Mode TPS -ImportApps -GenerateBuildAll -SkipGitOperations
+                        '''
+                    }
+
+                    echo 'Build completed'
                 }
-
-                echo 'Build completed'
             }
         }
     }

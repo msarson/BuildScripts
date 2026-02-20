@@ -71,15 +71,17 @@ pipeline {
 
         stage('Build SQL') {
             steps {
-                echo 'Starting Accura SQL build...'
+                lock('clarion-generator') {
+                    echo 'Acquired Clarion generator lock - starting Accura SQL build...'
 
-                dir('Accura') {
-                    powershell '''
-                        C:\\BuildScripts\\build.ps1 -Mode SQL -ImportApps -GenerateBuildAll -SkipGitOperations -DebugBuild
-                    '''
+                    dir('Accura') {
+                        powershell '''
+                            C:\\BuildScripts\\build.ps1 -Mode SQL -ImportApps -GenerateBuildAll -SkipGitOperations -DebugBuild
+                        '''
+                    }
+
+                    echo 'Build completed'
                 }
-
-                echo 'Build completed'
             }
         }
     }
