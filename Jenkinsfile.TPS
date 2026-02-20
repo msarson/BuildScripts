@@ -93,6 +93,7 @@ pipeline {
         failure {
             emailext subject: "❌ Accura TPS Build #${BUILD_NUMBER} - FAILED",
                      body: "Build #${BUILD_NUMBER} failed.\n\nView logs: ${BUILD_URL}console",
+                     attachmentsPattern: 'Accura/build-output/failed/*.log',
                      to: 'mark@marksarson.com'
         }
         fixed {

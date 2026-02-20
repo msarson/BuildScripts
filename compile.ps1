@@ -392,6 +392,7 @@ if (Test-Path "C:\BuildScripts\RedFiles\Clarion100_bin.red") {
 
 # Create build-output directory if it doesn't exist
 $buildOutputDir = Join-Path $solutionDir "build-output"
+$failedLogsDir = Join-Path $buildOutputDir "failed"
 if (-not (Test-Path $buildOutputDir)) {
     New-Item -ItemType Directory -Path $buildOutputDir -Force | Out-Null
     Write-Info "Created build-output directory"
@@ -399,6 +400,11 @@ if (-not (Test-Path $buildOutputDir)) {
     # Clear all previous logs
     Write-Info "Clearing previous build logs..."
     Get-ChildItem -Path $buildOutputDir -Filter "*.log" | Remove-Item -Force
+}
+if (-not (Test-Path $failedLogsDir)) {
+    New-Item -ItemType Directory -Path $failedLogsDir -Force | Out-Null
+} else {
+    Get-ChildItem -Path $failedLogsDir -Filter "*.log" | Remove-Item -Force
 }
 
 # STEP 1: GENERATE
@@ -597,6 +603,13 @@ if ($BuildOnly -or $GenerateBuild) {
         $failCount = 0
         $failedProjects = @()
         $skippedCount = 0
+
+        function Copy-FailedLog($projectName) {
+            $src = Join-Path $buildOutputDir "build_${projectName}.log"
+            if (Test-Path $src) {
+                Copy-Item $src (Join-Path $failedLogsDir "build_${projectName}.log") -Force
+            }
+        }
         
         for ($i = 0; $i -lt $buildOrder.Count; $i++) {
             $projectName = $buildOrder[$i]
@@ -749,6 +762,7 @@ if ($BuildOnly -or $GenerateBuild) {
                     
                     # Only show errors on last pass or if stopping on error
                     if ($failedProjects -contains $projectName) {
+                        Copy-FailedLog $projectName
                         if (($StopOnError -and -not $hasCircularDeps) -or ($pass -eq $maxPasses)) {
                             # Show errors
                             if (Test-Path $projectBuildLog) {
@@ -789,6 +803,7 @@ if ($BuildOnly -or $GenerateBuild) {
                 Write-Host "exception: $_" -ForegroundColor Red
                 $failCount++
                 $failedProjects += $projectName
+                Copy-FailedLog $projectName
                 
                 if ($projectName -in @('classes', 'data')) {
                     Write-Host ""
