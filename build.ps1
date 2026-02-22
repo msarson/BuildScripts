@@ -428,6 +428,18 @@ function Register-Templates {
     }
 }
 
+function Get-VCFolderHash {
+    param([string]$FolderPath)
+    $files = Get-ChildItem $FolderPath -Filter "*.APV" -Recurse | Sort-Object FullName
+    if ($files.Count -eq 0) { return $null }
+    $hashInput = ($files | ForEach-Object { "$($_.FullName)=$($_.LastWriteTimeUtc.Ticks)=$($_.Length)" }) -join ";"
+    return [System.BitConverter]::ToString(
+        [System.Security.Cryptography.MD5]::Create().ComputeHash(
+            [System.Text.Encoding]::UTF8.GetBytes($hashInput)
+        )
+    ).Replace("-","")
+}
+
 function Import-AppFromVC {
     param(
         [string]$AppName,
@@ -785,19 +797,49 @@ if ($ImportApps) {
     $apps = Get-SolutionApps $solutionFile
     Write-Info "Found $($apps.Count) apps in solution"
     
-    $successCount = 0
-    $failCount = 0
-    
-    foreach ($app in $apps) {
-        if (Import-AppFromVC -AppName $app.Name -AppFile $app.AppFile -VCFolder $app.VCFolder -ClarionPath $clarion10Path -ConfigDir $modeConfigDir) {
-            $successCount++
-        } else {
-            $failCount++
+    # Load import cache
+    $importCacheFile = Join-Path (Get-Location) "vcDevelopment\.import-cache.json"
+    $importCache = @{}
+    if (Test-Path $importCacheFile) {
+        try {
+            $importCache = Get-Content $importCacheFile | ConvertFrom-Json -AsHashtable
+        } catch {
+            Write-Warning "  Could not read import cache, will re-import all apps"
+            $importCache = @{}
         }
     }
     
+    $successCount = 0
+    $failCount = 0
+    $skippedCount = 0
+    
+    foreach ($app in $apps) {
+        $vcFolderFull = Join-Path (Get-Location) $app.VCFolder
+        $currentHash = if (Test-Path $vcFolderFull) { Get-VCFolderHash $vcFolderFull } else { $null }
+        $cachedHash = $importCache[$app.Name]
+
+        if ($currentHash -and $cachedHash -eq $currentHash -and (Test-Path $app.AppFile)) {
+            Write-Host "  [skipped] $($app.Name) (no changes)" -ForegroundColor DarkGray
+            $skippedCount++
+            $successCount++
+            continue
+        }
+
+        if (Import-AppFromVC -AppName $app.Name -AppFile $app.AppFile -VCFolder $app.VCFolder -ClarionPath $clarion10Path -ConfigDir $modeConfigDir) {
+            $successCount++
+            if ($currentHash) { $importCache[$app.Name] = $currentHash }
+        } else {
+            $failCount++
+            # Remove from cache so it retries next build
+            $importCache.Remove($app.Name)
+        }
+    }
+
+    # Save updated cache
+    $importCache | ConvertTo-Json | Set-Content $importCacheFile
+    
     Write-Host "`nImport Summary:" -ForegroundColor Magenta
-    Write-Success "  $successCount apps imported successfully"
+    Write-Success "  $successCount apps OK ($skippedCount skipped, $($successCount - $skippedCount) imported)"
     if ($failCount -gt 0) {
         Write-Warning "  $failCount apps failed to import"
     }

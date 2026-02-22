@@ -44,6 +44,9 @@ TemplatePatches/
 # Template registry cache key (written into Clarion installation at build time)
 **/.trf-cache-key
 
+# App import cache (written into Accura workspace at build time)
+vcDevelopment/.import-cache.json
+
 ClarionConfig/preferences/
 ClarionConfig/temp/
 ClarionConfig/DomPersistence/
