@@ -41,6 +41,9 @@ ClarionConfigTPS/ClarionProperties.xml
 # Temporary template patches (copied from Clarion repo, not committed)
 TemplatePatches/
 
+# Template registry cache key (written into Clarion installation at build time)
+**/.trf-cache-key
+
 ClarionConfig/preferences/
 ClarionConfig/temp/
 ClarionConfig/DomPersistence/

@@ -281,6 +281,33 @@ function Setup-ModeSpecificConfig {
     return $modeConfigDir
 }
 
+function Get-TemplateCacheKey {
+    param(
+        [string]$ClarionPath,
+        [string]$TemplatePatchDir
+    )
+
+    # Get Clarion repo commit SHA
+    $clarionSHA = git -C $ClarionPath rev-parse HEAD 2>$null
+    if (-not $clarionSHA) { return $null }
+
+    # Hash contents of any template patches (file names + last-write times)
+    $patchHash = ""
+    if (Test-Path $TemplatePatchDir) {
+        $patches = Get-ChildItem $TemplatePatchDir -Filter "*.tpl" | Sort-Object Name
+        if ($patches.Count -gt 0) {
+            $patchString = ($patches | ForEach-Object { "$($_.Name)=$($_.LastWriteTimeUtc.Ticks)" }) -join ";"
+            $patchHash = [System.BitConverter]::ToString(
+                [System.Security.Cryptography.MD5]::Create().ComputeHash(
+                    [System.Text.Encoding]::UTF8.GetBytes($patchString)
+                )
+            ).Replace("-","").Substring(0,8)
+        }
+    }
+
+    return "$clarionSHA|$patchHash"
+}
+
 function Register-Templates {
     param(
         [Parameter(Mandatory=$true)]
@@ -295,11 +322,28 @@ function Register-Templates {
         $ClarionPath = [System.IO.Path]::GetFullPath($ClarionPath)
     }
     
-    # Always delete existing TRF to force fresh registration (ensures clean builds)
     $trfFile = Join-Path $ClarionPath "template\win\TemplateRegistry10.trf"
+    $cacheFile = Join-Path $ClarionPath "template\win\.trf-cache-key"
+    $templatePatchDir = "C:\BuildScripts\TemplatePatches"
+
+    # Check if TRF is up to date
+    $currentKey = Get-TemplateCacheKey -ClarionPath $ClarionPath -TemplatePatchDir $templatePatchDir
+    if ($currentKey -and (Test-Path $trfFile) -and (Test-Path $cacheFile)) {
+        $savedKey = Get-Content $cacheFile -Raw
+        if ($savedKey.Trim() -eq $currentKey.Trim()) {
+            Write-Success "  Template registry is up to date (cache hit) - skipping registration"
+            return $true
+        }
+        Write-Info "  Cache key changed - re-registering templates"
+    }
+
+    # Delete existing TRF to force fresh registration
     if (Test-Path $trfFile) {
         Remove-Item $trfFile -Force
         Write-Info "  Deleted existing template registry for fresh registration"
+    }
+    if (Test-Path $cacheFile) {
+        Remove-Item $cacheFile -Force
     }
     
     # Use template-mapping.json from workspace Clarion/Jenkins folder
@@ -369,6 +413,13 @@ function Register-Templates {
         }
         
         Write-Success ("  + Registered $registered templates (failed: $failed) in {0:F1}s total" -f $totalStopwatch.Elapsed.TotalSeconds)
+
+        # Save cache key only on full success
+        if ($failed -eq 0 -and $currentKey) {
+            Set-Content $cacheFile $currentKey -NoNewline
+            Write-Info "  Saved template cache key"
+        }
+
         return ($failed -eq 0)
     }
     catch {
