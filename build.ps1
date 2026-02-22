@@ -432,12 +432,16 @@ function Get-VCFolderHash {
     param([string]$FolderPath)
     $files = Get-ChildItem $FolderPath -Filter "*.APV" -Recurse | Sort-Object FullName
     if ($files.Count -eq 0) { return $null }
-    $hashInput = ($files | ForEach-Object { "$($_.FullName)=$($_.LastWriteTimeUtc.Ticks)=$($_.Length)" }) -join ";"
-    return [System.BitConverter]::ToString(
-        [System.Security.Cryptography.MD5]::Create().ComputeHash(
-            [System.Text.Encoding]::UTF8.GetBytes($hashInput)
-        )
-    ).Replace("-","")
+    $md5 = [System.Security.Cryptography.MD5]::Create()
+    # Hash file paths + content so renames and edits both trigger re-import
+    $combined = [System.Text.StringBuilder]::new()
+    foreach ($file in $files) {
+        [void]$combined.Append($file.FullName)
+        [void]$combined.Append("=")
+        [void]$combined.Append([System.BitConverter]::ToString($md5.ComputeHash([System.IO.File]::ReadAllBytes($file.FullName))).Replace("-",""))
+        [void]$combined.Append(";")
+    }
+    return [System.BitConverter]::ToString($md5.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($combined.ToString()))).Replace("-","")
 }
 
 function Import-AppFromVC {
