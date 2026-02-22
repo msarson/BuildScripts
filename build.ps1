@@ -639,7 +639,7 @@ if ($Mode) {
                 Write-Success "  + Version.ini (from versions\sql\)"
             }
 
-            $sqlRed = "C:\BuildScripts\RedFiles\Clarion100_accura.red"
+            $sqlRed = "C:\BuildScripts\RedFiles\Clarion100_tps.red"
             if (Test-Path $sqlRed) {
                 Copy-Item $sqlRed "Clarion100.red" -Force
                 Write-Success "  + Clarion100.red (from BuildScripts\RedFiles\)"

@@ -20,9 +20,23 @@ ClarionConfig/DictionaryOptions/
 ClarionConfig/layouts/
 ClarionConfigSQL/MenuShorcuts.xml
 ClarionConfigSQL/DomPersistence/
+ClarionConfigSQL/RecentOpen.xml
+ClarionConfigSQL/Lib*.xml
+ClarionConfigSQL/*.xml.old
+ClarionConfigSQL/*.xml.bloated_backup
+ClarionConfigSQL/layouts/
+ClarionConfigSQL/preferences/
+ClarionConfigSQL/ClarionProperties.xml
 ClarionConfigTPS/Clarion-tools.xml
 ClarionConfigTPS/MenuShorcuts.xml
+ClarionConfigTPS/DomPersistence/
+ClarionConfigTPS/RecentOpen.xml
+ClarionConfigTPS/Lib*.xml
+ClarionConfigTPS/*.xml.old
+ClarionConfigTPS/*.xml.bloated_backup
 ClarionConfigTPS/layouts/
+ClarionConfigTPS/preferences/
+ClarionConfigTPS/ClarionProperties.xml
 
 # Temporary template patches (copied from Clarion repo, not committed)
 TemplatePatches/
@@ -33,10 +47,3 @@ ClarionConfig/DomPersistence/
 ClarionConfig/RecentOpen.xml
 ClarionConfig/ClarionProperties.xml
 ClarionConfig/ClarionProperties.xml.old
-ClarionConfigSQL/ClarionProperties.xml
-ClarionConfigSQL/ClarionProperties.xml.old
-ClarionConfigTPS/preferences/
-ClarionConfigTPS/DomPersistence/
-ClarionConfigTPS/RecentOpen.xml
-ClarionConfigTPS/ClarionProperties.xml
-ClarionConfigTPS/ClarionProperties.xml.old
