@@ -482,8 +482,7 @@ if ($GenerateOnly -or $GenerateBuild) {
             } else {
                 Write-Host "    x " -NoNewline -ForegroundColor Red
                 Write-Host "Generation failed (exit code: $($genProcess.ExitCode))" -ForegroundColor Yellow
-                $failCount++
-                
+
                 # Show errors from stdout log
                 if (Test-Path $appLog) {
                     $genOutput = Get-Content $appLog -Raw
@@ -503,10 +502,64 @@ if ($GenerateOnly -or $GenerateBuild) {
                         if ($_.Trim()) { Write-Host "      $($_.Trim())" -ForegroundColor Yellow }
                     }
                 }
-                
-                if ($StopOnError) {
-                    Write-Error-Custom "Generation failed for $appName. Stopping."
-                    exit 1
+
+                # If the .app could not be opened, try re-importing from vcDevelopment then retry generation once
+                $vcFolder = Join-Path $solutionDir "vcDevelopment\$appName"
+                $claInterfacePath = "C:\Program Files (x86)\UpperParkSolutions\claInterface\ClaInterface.exe"
+                $upstxaFile = Join-Path $solutionDir "$appName.upstxa"
+                $retried = $false
+
+                if ((Test-Path $vcFolder) -and (Test-Path $claInterfacePath)) {
+                    Write-Host "      Attempting re-import from vcDevelopment and retrying..." -ForegroundColor DarkYellow
+
+                    $buildTxaArgs = "/quiet /ConfigDir `"$effectiveConfigDir`" COMMAND=BUILDTXA INPUT=`"$vcFolder`" OUTPUT=`"$upstxaFile`" APPNAME=`"$appName`""
+                    $txaProc = Start-Process -FilePath $claInterfacePath -ArgumentList $buildTxaArgs -Wait -NoNewWindow -PassThru
+
+                    if ($txaProc.ExitCode -eq 0 -and (Test-Path $upstxaFile)) {
+                        $importArgs = "/ConfigDir `"$effectiveConfigDir`" /ai `"$($app.AppFile)`" `"$upstxaFile`""
+                        $importProc = Start-Process -FilePath $clarionCL -ArgumentList $importArgs -Wait -NoNewWindow -PassThru
+
+                        if (Test-Path $upstxaFile) { Remove-Item $upstxaFile -Force }
+
+                        if ($importProc.ExitCode -eq 0) {
+                            # Retry generation
+                            $retryLog    = Join-Path $buildOutputDir "generate_${appName}_retry.log"
+                            $retryErrLog = Join-Path $buildOutputDir "generate_${appName}_retry.err.log"
+                            $retryProcess = Start-Process -FilePath $clarionCL `
+                                -ArgumentList "/ConfigDir", "`"$effectiveConfigDir`"", "/win", "/rs", $Configuration, "/ag", "`"$($app.AppFile)`"" `
+                                -WorkingDirectory $solutionDir `
+                                -NoNewWindow -Wait -PassThru `
+                                -RedirectStandardOutput $retryLog `
+                                -RedirectStandardError $retryErrLog
+
+                            if ($retryProcess.ExitCode -eq 0) {
+                                Write-Host "    + " -NoNewline -ForegroundColor Green
+                                Write-Host "Generated successfully (after re-import)" -ForegroundColor Gray
+                                $successCount++
+                                $retried = $true
+                            } else {
+                                Write-Host "      Re-import retry also failed (exit code: $($retryProcess.ExitCode))" -ForegroundColor Yellow
+                                if ((Test-Path $retryErrLog) -and (Get-Item $retryErrLog).Length -gt 0) {
+                                    Get-Content $retryErrLog | Select-Object -First 5 | ForEach-Object {
+                                        if ($_.Trim()) { Write-Host "      [stderr] $($_.Trim())" -ForegroundColor Yellow }
+                                    }
+                                }
+                            }
+                        } else {
+                            Write-Host "      Re-import failed (exit code: $($importProc.ExitCode))" -ForegroundColor Yellow
+                        }
+                    } else {
+                        Write-Host "      Failed to build TXA for re-import (exit code: $($txaProc.ExitCode))" -ForegroundColor Yellow
+                        if (Test-Path $upstxaFile) { Remove-Item $upstxaFile -Force }
+                    }
+                }
+
+                if (-not $retried) {
+                    $failCount++
+                    if ($StopOnError) {
+                        Write-Error-Custom "Generation failed for $appName. Stopping."
+                        exit 1
+                    }
                 }
             }
             
