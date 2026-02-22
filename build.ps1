@@ -806,7 +806,10 @@ if ($ImportApps) {
     $importCache = @{}
     if (Test-Path $importCacheFile) {
         try {
-            $importCache = Get-Content $importCacheFile | ConvertFrom-Json -AsHashtable
+            $json = Get-Content $importCacheFile | ConvertFrom-Json
+            # ConvertFrom-Json returns PSCustomObject in PS 5.1 - convert to hashtable manually
+            $importCache = @{}
+            $json.PSObject.Properties | ForEach-Object { $importCache[$_.Name] = $_.Value }
         } catch {
             Write-Warning "  Could not read import cache, will re-import all apps"
             $importCache = @{}
