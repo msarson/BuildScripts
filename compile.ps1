@@ -453,18 +453,25 @@ if ($GenerateOnly -or $GenerateBuild) {
             $appLog = Join-Path $buildOutputDir "generate_$appName.log"
             $effectiveConfigDir = if ($ConfigDir) { $ConfigDir } else { "C:\BuildScripts\ClarionConfig" }
             
+            $appErrLog = Join-Path $buildOutputDir "generate_$appName.err.log"
             $genProcess = Start-Process -FilePath $clarionCL `
                 -ArgumentList "/ConfigDir", "`"$effectiveConfigDir`"", "/win", "/rs", $Configuration, "/ag", "`"$($app.AppFile)`"" `
                 -WorkingDirectory $solutionDir `
                 -NoNewWindow `
                 -Wait `
                 -PassThru `
-                -RedirectStandardOutput $appLog
+                -RedirectStandardOutput $appLog `
+                -RedirectStandardError $appErrLog
             
-            # Append to master log
+            # Append to master log (stdout + stderr)
             if (Test-Path $appLog) {
                 Add-Content -Path $generateLog -Value "=== $appName.app ==="
                 Get-Content $appLog | Add-Content -Path $generateLog
+                Add-Content -Path $generateLog -Value ""
+            }
+            if ((Test-Path $appErrLog) -and (Get-Item $appErrLog).Length -gt 0) {
+                Add-Content -Path $generateLog -Value "=== $appName.app (stderr) ==="
+                Get-Content $appErrLog | Add-Content -Path $generateLog
                 Add-Content -Path $generateLog -Value ""
             }
             
@@ -477,7 +484,7 @@ if ($GenerateOnly -or $GenerateBuild) {
                 Write-Host "Generation failed (exit code: $($genProcess.ExitCode))" -ForegroundColor Yellow
                 $failCount++
                 
-                # Show errors from log
+                # Show errors from stdout log
                 if (Test-Path $appLog) {
                     $genOutput = Get-Content $appLog -Raw
                     $genErrors = $genOutput -split "`n" | Where-Object { $_ -match "error" } | Select-Object -First 5
@@ -487,6 +494,13 @@ if ($GenerateOnly -or $GenerateBuild) {
                                 Write-Host "      $($line.Trim())" -ForegroundColor Yellow
                             }
                         }
+                    }
+                }
+                # Show stderr (captures dialog text / unhandled exceptions)
+                if ((Test-Path $appErrLog) -and (Get-Item $appErrLog).Length -gt 0) {
+                    Write-Host "      [stderr]:" -ForegroundColor DarkYellow
+                    Get-Content $appErrLog | Select-Object -First 10 | ForEach-Object {
+                        if ($_.Trim()) { Write-Host "      $($_.Trim())" -ForegroundColor Yellow }
                     }
                 }
                 
@@ -695,15 +709,22 @@ if ($BuildOnly -or $GenerateBuild) {
                         $appFile = Join-Path $solutionDir "$projectName.app"
                         if (Test-Path $appFile) {
                             $regenLog = Join-Path $buildOutputDir "generate_${projectName}_release_regen.log"
+                            $regenErrLog = Join-Path $buildOutputDir "generate_${projectName}_release_regen.err.log"
                             $regenProcess = Start-Process -FilePath $clarionCL `
                                 -ArgumentList "/ConfigDir", "`"$effectiveConfigDir`"", "/win", "/rs", "Release", "/ag", "`"$appFile`"" `
                                 -WorkingDirectory $solutionDir `
                                 -NoNewWindow `
                                 -Wait `
                                 -PassThru `
-                                -RedirectStandardOutput $regenLog
+                                -RedirectStandardOutput $regenLog `
+                                -RedirectStandardError $regenErrLog
                             if ($regenProcess.ExitCode -ne 0) {
                                 Write-Host "      (Release re-generation failed, build may still be attempted)" -ForegroundColor DarkYellow
+                                if ((Test-Path $regenErrLog) -and (Get-Item $regenErrLog).Length -gt 0) {
+                                    Get-Content $regenErrLog | Select-Object -First 5 | ForEach-Object {
+                                        if ($_.Trim()) { Write-Host "      [stderr] $($_.Trim())" -ForegroundColor DarkYellow }
+                                    }
+                                }
                             }
                         }
 
