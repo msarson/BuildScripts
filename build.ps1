@@ -330,6 +330,8 @@ function Register-Templates {
         
         $registered = 0
         $failed = 0
+        $timings = @()
+        $totalStopwatch = [System.Diagnostics.Stopwatch]::StartNew()
         
         # Register templates by directory
         foreach ($dir in $mappingData) {
@@ -339,12 +341,17 @@ function Register-Templates {
                 $templatePath = Join-Path $dirPath $template.file
                 
                 if (Test-Path $templatePath) {
+                    $sw = [System.Diagnostics.Stopwatch]::StartNew()
                     $result = & $clarionCL "/ConfigDir" $ConfigDir "/tr" $templatePath 2>&1
+                    $sw.Stop()
+                    $elapsed = $sw.Elapsed.TotalSeconds
+                    $timings += [PSCustomObject]@{ Name = $template.name; File = $template.file; Seconds = $elapsed; OK = ($LASTEXITCODE -eq 0) }
                     if ($LASTEXITCODE -eq 0) {
                         $registered++
+                        Write-Host ("  [{0,6:F2}s] {1}" -f $elapsed, $template.name) -ForegroundColor $(if ($elapsed -gt 5) { 'Yellow' } else { 'DarkGray' })
                     } else {
                         $failed++
-                        Write-Warning "  Failed to register $($template.name)"
+                        Write-Warning ("  [{0,6:F2}s] FAILED: {1}" -f $elapsed, $template.name)
                     }
                 } else {
                     $failed++
@@ -353,7 +360,15 @@ function Register-Templates {
             }
         }
         
-        Write-Success "  + Registered $registered templates (failed: $failed)"
+        $totalStopwatch.Stop()
+        
+        # Show slowest templates
+        Write-Host "`n  Top 5 slowest templates:" -ForegroundColor Cyan
+        $timings | Sort-Object Seconds -Descending | Select-Object -First 5 | ForEach-Object {
+            Write-Host ("    {0,6:F2}s  {1}" -f $_.Seconds, $_.Name) -ForegroundColor Cyan
+        }
+        
+        Write-Success ("  + Registered $registered templates (failed: $failed) in {0:F1}s total" -f $totalStopwatch.Elapsed.TotalSeconds)
         return ($failed -eq 0)
     }
     catch {
