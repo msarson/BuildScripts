@@ -76,7 +76,7 @@ pipeline {
 
                     dir('Accura') {
                         powershell '''
-                            C:\\BuildScripts\\build.ps1 -Mode TPS -ImportApps -GenerateBuildAll -SkipGitOperations
+                            C:\\BuildScripts\\build.ps1 -Mode TPS -ImportApps -GenerateBuildAll -SkipGitOperations -DebugBuild
                         '''
                     }
 

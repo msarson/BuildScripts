@@ -511,46 +511,6 @@ Write-Host ("Started: " + (Get-Date -Format "yyyy-MM-dd HH:mm:ss") + "`n") -Fore
 # Get Clarion10 path from config (needed for both mode switching and building)
 $clarion10Path = Get-Clarion10Path -Mode $Mode
 
-# Apply SQL-specific Clarion templates (only 2 files are different from TPS)
-# IMPORTANT: This must happen BEFORE template registration so Clarion can update the TRF automatically
-if ($Mode -and $Mode.ToUpper() -eq 'SQL') {
-    Write-Host "`n--- Applying SQL Clarion Templates ---" -ForegroundColor Magenta
-    
-    # Copy from SQLChanges backup folder in the Clarion installation
-    # Clarion is at ..\Clarion relative to Accura workspace (current directory)
-    $clarionRoot = if ([System.IO.Path]::IsPathRooted($clarion10Path)) {
-        $clarion10Path
-    } else {
-        # Resolve relative to current working directory, not script location
-        Join-Path (Get-Location) $clarion10Path | Resolve-Path | Select-Object -ExpandProperty Path
-    }
-    
-    $sqlChangesDir = Join-Path $clarionRoot "SQLChanges\accessory\template\win"
-    $destDir = Join-Path $clarionRoot "accessory\template\win"
-    
-    $sqlFiles = @("CTSQW10ABC.tpl", "CTSQW10ABC.tpw")
-    $copyCount = 0
-    
-    foreach ($file in $sqlFiles) {
-        $source = Join-Path $sqlChangesDir $file
-        $dest = Join-Path $destDir $file
-        
-        if (Test-Path $source) {
-            Copy-Item $source $dest -Force
-            Write-Info "  + $file (from SQLChanges backup)"
-            $copyCount++
-        } else {
-            Write-Warning "SQL template file not found in SQLChanges: $file"
-        }
-    }
-    
-    if ($copyCount -eq $sqlFiles.Count) {
-        Write-Success "Applied $copyCount SQL-specific templates (Clarion will auto-update TRF)"
-    } else {
-        Write-Warning "Applied $copyCount of $($sqlFiles.Count) SQL templates"
-    }
-}
-
 # If mode is not specified, try to read from config.json
 if ([string]::IsNullOrWhiteSpace($Mode)) {
     $config = Get-BuildConfig
@@ -696,15 +656,6 @@ if ($Mode) {
                 Write-Success "  + Version.ini (from versions\tps\)"
             }
             
-            $tpsRed = "C:\BuildScripts\RedFiles\Clarion100_tps.red"
-            if (Test-Path $tpsRed) {
-                Copy-Item $tpsRed "Clarion100.red" -Force
-                Write-Success "  + Clarion100.red (from BuildScripts\RedFiles\)"
-            } elseif (Test-Path "versions\tps\Clarion100.red") {
-                Copy-Item "versions\tps\Clarion100.red" "Clarion100.red" -Force
-                Write-Success "  + Clarion100.red (from versions\tps\)"
-            }
-            
         } else {
             # SQL Mode: Copy AccuraMSQL.DCT to Accura.DCT
             if (Test-Path "AccuraMSQL.DCT") {
@@ -719,15 +670,6 @@ if ($Mode) {
             if (Test-Path "versions\sql\Version.ini") {
                 Copy-Item "versions\sql\Version.ini" "Version.ini" -Force
                 Write-Success "  + Version.ini (from versions\sql\)"
-            }
-
-            $sqlRed = "C:\BuildScripts\RedFiles\Clarion100_tps.red"
-            if (Test-Path $sqlRed) {
-                Copy-Item $sqlRed "Clarion100.red" -Force
-                Write-Success "  + Clarion100.red (from BuildScripts\RedFiles\)"
-            } elseif (Test-Path "versions\sql\Clarion100.red") {
-                Copy-Item "versions\sql\Clarion100.red" "Clarion100.red" -Force
-                Write-Success "  + Clarion100.red (from versions\sql\)"
             }
         }
         
