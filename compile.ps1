@@ -443,9 +443,6 @@ if ($GenerateOnly -or $GenerateBuild) {
         Remove-Item $generateLog -Force
     }
     
-    # /agd on forces #DEBUG code generation (sets Win32App.BuildingDebug=true); independent of /rs which only controls output paths
-    $agdArgs = if ($Configuration -eq 'Debug') { @('/agd', 'on') } else { @() }
-
     Write-Host ""
     foreach ($app in $apps) {
         $appName = $app.Name
@@ -458,7 +455,7 @@ if ($GenerateOnly -or $GenerateBuild) {
             
             $appErrLog = Join-Path $buildOutputDir "generate_$appName.err.log"
             $genProcess = Start-Process -FilePath $clarionCL `
-                -ArgumentList (@("/ConfigDir", "`"$effectiveConfigDir`"", "/win", "/rs", $Configuration) + $agdArgs + @("/ag", "`"$($app.AppFile)`"")) `
+                -ArgumentList "/ConfigDir", "`"$effectiveConfigDir`"", "/win", "/rs", $Configuration, "/ag", "`"$($app.AppFile)`"" `
                 -WorkingDirectory $solutionDir `
                 -NoNewWindow `
                 -Wait `
@@ -529,7 +526,7 @@ if ($GenerateOnly -or $GenerateBuild) {
                             $retryLog    = Join-Path $buildOutputDir "generate_${appName}_retry.log"
                             $retryErrLog = Join-Path $buildOutputDir "generate_${appName}_retry.err.log"
                             $retryProcess = Start-Process -FilePath $clarionCL `
-                                -ArgumentList (@("/ConfigDir", "`"$effectiveConfigDir`"", "/win", "/rs", $Configuration) + $agdArgs + @("/ag", "`"$($app.AppFile)`"")) `
+                                -ArgumentList "/ConfigDir", "`"$effectiveConfigDir`"", "/win", "/rs", $Configuration, "/ag", "`"$($app.AppFile)`"" `
                                 -WorkingDirectory $solutionDir `
                                 -NoNewWindow -Wait -PassThru `
                                 -RedirectStandardOutput $retryLog `
