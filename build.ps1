@@ -141,7 +141,8 @@ function Setup-ModeSpecificConfig {
         [Parameter(Mandatory=$true)]
         [string]$Mode,
         [Parameter(Mandatory=$true)]
-        [string]$ClarionPath
+        [string]$ClarionPath,
+        [switch]$DebugBuild
     )
     
     $baseConfigDir = "C:\BuildScripts\ClarionConfig"
@@ -278,6 +279,21 @@ function Setup-ModeSpecificConfig {
         Write-Warning "  ClarionProperties.xml not found at: $propsFile"
     }
     
+    # Set UseReleaseAsDefault so ClarionCL generation respects the Debug configuration
+    # This controls Win32App.BuildingDebug which gates %ApplicationDebug in templates (e.g. DEBUGHOOK)
+    $useRelease = if ($DebugBuild) { 'False' } else { 'True' }
+    $propsXml = [xml](Get-Content $propsFile)
+    $node = $propsXml.SelectSingleNode("//SharpDevelop.UseReleaseAsDefault")
+    if ($node) {
+        $node.SetAttribute("value", $useRelease)
+    } else {
+        $newNode = $propsXml.CreateElement("SharpDevelop.UseReleaseAsDefault")
+        $newNode.SetAttribute("value", $useRelease)
+        $propsXml.DocumentElement.AppendChild($newNode) | Out-Null
+    }
+    $propsXml.Save($propsFile)
+    Write-Info "  Set SharpDevelop.UseReleaseAsDefault = $useRelease"
+
     return $modeConfigDir
 }
 
@@ -713,7 +729,7 @@ if ($ImportApps) {
     Write-Host "`n--- Importing Apps from Version Control ---" -ForegroundColor Magenta
     
     # Setup mode-specific Clarion configuration
-    $modeConfigDir = Setup-ModeSpecificConfig -Mode $Mode -ClarionPath $clarion10Path
+    $modeConfigDir = Setup-ModeSpecificConfig -Mode $Mode -ClarionPath $clarion10Path -DebugBuild:$DebugBuild
     Write-Info "Using config directory: $modeConfigDir"
 
     # Apply any local template patches (temporary fixes until upstream Clarion repo is corrected)
