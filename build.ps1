@@ -613,6 +613,10 @@ if ($currentBranch -eq $latestBranch.FullName) {
     # Ensure upstream tracking is set (Jenkins checkouts often omit this)
     git branch --set-upstream-to="origin/$currentBranch" $currentBranch 2>&1 | Out-Null
 
+    # Discard any local modifications (e.g. Clarion IDE touching .cwproj files)
+    git reset --hard HEAD 2>&1 | Out-Null
+    Write-Info "Reset local modifications"
+
     # Pull latest changes
     Write-Info "Pulling latest changes..."
     try {
