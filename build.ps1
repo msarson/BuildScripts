@@ -610,10 +610,13 @@ $currentBranch = git branch --show-current
 if ($currentBranch -eq $latestBranch.FullName) {
     Write-Info "Already on latest branch: $currentBranch"
     
+    # Ensure upstream tracking is set (Jenkins checkouts often omit this)
+    git branch --set-upstream-to="origin/$currentBranch" $currentBranch 2>&1 | Out-Null
+
     # Pull latest changes
     Write-Info "Pulling latest changes..."
     try {
-        git pull origin $currentBranch
+        git pull
         Write-Success "Updated to latest commit"
     } catch {
         Write-Warning "Failed to pull changes: $_"
@@ -635,13 +638,13 @@ if ($currentBranch -eq $latestBranch.FullName) {
         Write-Success "Changes stashed"
     }
     
-    # Switch to the latest branch
+    # Switch to the latest branch and ensure upstream tracking is set
     try {
-        git checkout $latestBranch.FullName 2>&1 | Out-Null
+        git checkout -B $latestBranch.FullName --track "origin/$($latestBranch.FullName)" 2>&1 | Out-Null
         Write-Success "Switched to branch: $($latestBranch.FullName)"
         
         # Pull latest changes
-        git pull origin $latestBranch.FullName 2>&1 | Out-Null
+        git pull 2>&1 | Out-Null
         Write-Success "Updated to latest commit"
     } catch {
         Write-Error-Custom "Failed to switch branch: $_"
