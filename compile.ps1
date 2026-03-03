@@ -483,16 +483,22 @@ if ($GenerateOnly -or $GenerateBuild) {
                 Write-Host "    x " -NoNewline -ForegroundColor Red
                 Write-Host "Generation failed (exit code: $($genProcess.ExitCode))" -ForegroundColor Yellow
 
-                # Show errors from stdout log
+                # Show errors and last lines from stdout log (last lines captures stack traces)
                 if (Test-Path $appLog) {
-                    $genOutput = Get-Content $appLog -Raw
-                    $genErrors = $genOutput -split "`n" | Where-Object { $_ -match "error" } | Select-Object -First 5
+                    $genLines = Get-Content $appLog
+                    $genErrors = $genLines | Where-Object { $_ -match "error" } | Select-Object -First 5
                     if ($genErrors) {
                         foreach ($line in $genErrors) {
                             if ($line.Trim()) {
                                 Write-Host "      $($line.Trim())" -ForegroundColor Yellow
                             }
                         }
+                    }
+                    # Also show last 20 lines for stack trace / procedure context
+                    $lastLines = $genLines | Select-Object -Last 20
+                    if ($lastLines) {
+                        Write-Host "      [last lines of log]:" -ForegroundColor DarkYellow
+                        $lastLines | ForEach-Object { if ($_.Trim()) { Write-Host "      $($_.Trim())" -ForegroundColor Yellow } }
                     }
                 }
                 # Show stderr (captures dialog text / unhandled exceptions)
@@ -539,6 +545,18 @@ if ($GenerateOnly -or $GenerateBuild) {
                                 $retried = $true
                             } else {
                                 Write-Host "      Re-import retry also failed (exit code: $($retryProcess.ExitCode))" -ForegroundColor Yellow
+                                if (Test-Path $retryLog) {
+                                    $retryLines = Get-Content $retryLog
+                                    $retryErrors = $retryLines | Where-Object { $_ -match "error" } | Select-Object -First 5
+                                    if ($retryErrors) {
+                                        $retryErrors | ForEach-Object { if ($_.Trim()) { Write-Host "      $($_.Trim())" -ForegroundColor Yellow } }
+                                    }
+                                    $retryLast = $retryLines | Select-Object -Last 20
+                                    if ($retryLast) {
+                                        Write-Host "      [last lines of retry log]:" -ForegroundColor DarkYellow
+                                        $retryLast | ForEach-Object { if ($_.Trim()) { Write-Host "      $($_.Trim())" -ForegroundColor Yellow } }
+                                    }
+                                }
                                 if ((Test-Path $retryErrLog) -and (Get-Item $retryErrLog).Length -gt 0) {
                                     Get-Content $retryErrLog | Select-Object -First 5 | ForEach-Object {
                                         if ($_.Trim()) { Write-Host "      [stderr] $($_.Trim())" -ForegroundColor Yellow }
