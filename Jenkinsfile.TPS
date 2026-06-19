@@ -30,9 +30,23 @@ pipeline {
                 echo 'Checking out Accura and Clarion repositories...'
 
                 dir('Accura') {
-                    git branch: 'v640_Build7',
+                    // Initial checkout - also fetches all remote-tracking branches
+                    git branch: 'master',
                         credentialsId: 'github-ssh',
                         url: 'git@github.com:accuramis/accura.git'
+
+                    // Trevor cuts new v###_Build# branches often, so always build the
+                    // most recently committed one instead of a hardcoded branch.
+                    script {
+                        env.ACCURA_BRANCH = powershell(returnStdout: true, script: '''
+                            $ErrorActionPreference = "Stop"
+                            $ref = git for-each-ref --sort=-committerdate --format="%(refname:short)" "refs/remotes/origin/v*_Build*" | Select-Object -First 1
+                            if (-not $ref) { throw "No v###_Build# branches found on accura remote" }
+                            $ref -replace "^origin/", ""
+                        ''').trim()
+                    }
+                    echo "Latest Accura branch (by commit date): ${env.ACCURA_BRANCH}"
+                    powershell "git checkout ${env.ACCURA_BRANCH}"
                 }
 
                 dir('Clarion') {
