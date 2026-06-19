@@ -39,10 +39,10 @@ pipeline {
                     // most recently committed one instead of a hardcoded branch.
                     script {
                         env.ACCURA_BRANCH = powershell(returnStdout: true, script: '''
-                            $ErrorActionPreference = "Stop"
-                            $ref = git for-each-ref --sort=-committerdate --format="%(refname:short)" "refs/remotes/origin/v*_Build*" | Select-Object -First 1
-                            if (-not $ref) { throw "No v###_Build# branches found on accura remote" }
-                            $ref -replace "^origin/", ""
+                            $refs = @(git for-each-ref --sort=-committerdate --format="%(refname:short)" "refs/remotes/origin/v*_Build*")
+                            if ($refs.Count -eq 0) { Write-Error "No v###_Build# branches found on accura remote"; exit 1 }
+                            Write-Output ($refs[0] -replace "^origin/", "")
+                            exit 0
                         ''').trim()
                     }
                     echo "Latest Accura branch (by commit date): ${env.ACCURA_BRANCH}"
