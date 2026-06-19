@@ -100,18 +100,15 @@ function Get-ClarionPathFromConfig {
 
 function Get-VcOutputFolder {
     param([string]$SolutionDir)
+    # up_vcSettings.ini is gitignored / may be absent in a clean workspace.
+    # Fall back to the conventional relative folder rather than throwing.
+    $default = "vcDevelopment"
+    if ([string]::IsNullOrWhiteSpace($SolutionDir)) { return $default }
     $ini = Join-Path $SolutionDir "up_vcSettings.ini"
-    if (-not (Test-Path $ini)) {
-        throw "up_vcSettings.ini not found in '$SolutionDir'. Cannot determine VC output folder."
-    }
+    if (-not (Test-Path $ini)) { return $default }
     $line = Get-Content $ini | Where-Object { $_ -match '^OutputFolder\s*=' } | Select-Object -First 1
-    if (-not $line) {
-        throw "OutputFolder not found in '$ini'. Cannot determine VC output folder."
-    }
-    $folder = ($line -split '=', 2)[1].Trim()
-    if (-not $folder) {
-        throw "OutputFolder is empty in '$ini'. Cannot determine VC output folder."
-    }
+    $folder = if ($line) { ($line -split '=', 2)[1].Trim() } else { '' }
+    if (-not $folder) { return $default }
     return $folder
 }
 

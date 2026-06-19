@@ -116,21 +116,25 @@ function Get-Clarion10Path {
 
 function Get-VcOutputFolder {
     param([string]$SolutionDir)
+    # up_vcSettings.ini is gitignored and only exists where the Clarion VC interface
+    # has run, so a clean/concurrent workspace (e.g. AccuraBuild@2) may not have it.
+    # Fall back to the conventional relative folder rather than failing the build.
+    $default = "vcDevelopment"
     if ([string]::IsNullOrWhiteSpace($SolutionDir)) {
-        throw "Get-VcOutputFolder: SolutionDir is empty. Caller must pass a resolved solution directory."
+        Write-Warning "  Get-VcOutputFolder: no solution dir supplied; using default '$default'"
+        return $default
     }
-    Write-Info "  Reading VC settings from: $(Join-Path $SolutionDir 'up_vcSettings.ini')"
     $ini = Join-Path $SolutionDir "up_vcSettings.ini"
     if (-not (Test-Path $ini)) {
-        throw "up_vcSettings.ini not found in '$SolutionDir'. Cannot determine VC output folder."
+        Write-Warning "  up_vcSettings.ini not found in '$SolutionDir'; using default VC output folder '$default'"
+        return $default
     }
+    Write-Info "  Reading VC settings from: $ini"
     $line = Get-Content $ini | Where-Object { $_ -match '^OutputFolder\s*=' } | Select-Object -First 1
-    if (-not $line) {
-        throw "OutputFolder not found in '$ini'. Cannot determine VC output folder."
-    }
-    $folder = ($line -split '=', 2)[1].Trim()
+    $folder = if ($line) { ($line -split '=', 2)[1].Trim() } else { '' }
     if (-not $folder) {
-        throw "OutputFolder is empty in '$ini'. Cannot determine VC output folder."
+        Write-Warning "  OutputFolder missing/empty in '$ini'; using default '$default'"
+        return $default
     }
     Write-Info "  VC OutputFolder: $folder"
     return $folder
