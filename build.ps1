@@ -114,9 +114,40 @@ function Get-Clarion10Path {
     } while ($true)
 }
 
+function Get-VcOutputFolder {
+    param([string]$SolutionDir)
+    if ([string]::IsNullOrWhiteSpace($SolutionDir)) {
+        throw "Get-VcOutputFolder: SolutionDir is empty. Caller must pass a resolved solution directory."
+    }
+    Write-Info "  Reading VC settings from: $(Join-Path $SolutionDir 'up_vcSettings.ini')"
+    $ini = Join-Path $SolutionDir "up_vcSettings.ini"
+    if (-not (Test-Path $ini)) {
+        throw "up_vcSettings.ini not found in '$SolutionDir'. Cannot determine VC output folder."
+    }
+    $line = Get-Content $ini | Where-Object { $_ -match '^OutputFolder\s*=' } | Select-Object -First 1
+    if (-not $line) {
+        throw "OutputFolder not found in '$ini'. Cannot determine VC output folder."
+    }
+    $folder = ($line -split '=', 2)[1].Trim()
+    if (-not $folder) {
+        throw "OutputFolder is empty in '$ini'. Cannot determine VC output folder."
+    }
+    Write-Info "  VC OutputFolder: $folder"
+    return $folder
+}
+
 function Get-SolutionApps {
     param([string]$SolutionFile)
-    
+
+    $solutionDir = Split-Path $SolutionFile -Parent
+    if (-not $solutionDir) {
+        # Bare filename (no directory component) -- resolve against current working dir
+        $solutionDir = (Get-Location).Path
+    }
+    Write-Info "  Solution file: $SolutionFile"
+    Write-Info "  Solution directory: $solutionDir"
+    $vcBase = Get-VcOutputFolder $solutionDir
+
     $apps = @()
     Get-Content $SolutionFile | ForEach-Object {
         if ($_ -match 'Project\(".*?"\)\s*=\s*"(.*?)",\s*"(.*?\.cwproj)"') {
@@ -129,7 +160,7 @@ function Get-SolutionApps {
                 Name = $appName
                 AppFile = $appFile
                 ProjectFile = $projectFile
-                VCFolder = "vcDevelopment\$appName"
+                VCFolder = Join-Path $vcBase $appName
             }
         }
     }
@@ -338,28 +369,18 @@ function Register-Templates {
         $ClarionPath = [System.IO.Path]::GetFullPath($ClarionPath)
     }
     
-    $trfFile = Join-Path $ClarionPath "template\win\TemplateRegistry10.trf"
+    $trfFile   = Join-Path $ClarionPath "template\win\TemplateRegistry10.trf"
     $cacheFile = Join-Path $ClarionPath "template\win\.trf-cache-key"
-    $templatePatchDir = "C:\BuildScripts\TemplatePatches"
 
-    # Check if TRF is up to date
-    $currentKey = Get-TemplateCacheKey -ClarionPath $ClarionPath -TemplatePatchDir $templatePatchDir
-    if ($currentKey -and (Test-Path $trfFile) -and (Test-Path $cacheFile)) {
-        $savedKey = Get-Content $cacheFile -Raw
-        if ($savedKey.Trim() -eq $currentKey.Trim()) {
-            Write-Success "  Template registry is up to date (cache hit) - skipping registration"
-            return $true
-        }
-        Write-Info "  Cache key changed - re-registering templates"
-    }
-
-    # Delete existing TRF to force fresh registration
+    # Caching disabled -- always register every template fresh.
+    Write-Info "  Cache disabled -- registering all templates fresh on every build"
     if (Test-Path $trfFile) {
         Remove-Item $trfFile -Force
-        Write-Info "  Deleted existing template registry for fresh registration"
+        Write-Info "  Deleted existing TRF to force fresh registration"
     }
     if (Test-Path $cacheFile) {
         Remove-Item $cacheFile -Force
+        Write-Info "  Removed stale cache key file"
     }
     
     # Use template-mapping.json from workspace Clarion/Jenkins folder
@@ -430,12 +451,6 @@ function Register-Templates {
         
         Write-Success ("  + Registered $registered templates (failed: $failed) in {0:F1}s total" -f $totalStopwatch.Elapsed.TotalSeconds)
 
-        # Save cache key only on full success
-        if ($failed -eq 0 -and $currentKey) {
-            Set-Content $cacheFile $currentKey -NoNewline
-            Write-Info "  Saved template cache key"
-        }
-
         return ($failed -eq 0)
     }
     catch {
@@ -473,52 +488,77 @@ function Import-AppFromVC {
     $claInterfacePath = "C:\Program Files (x86)\UpperParkSolutions\claInterface\ClaInterface.exe"
     $clarionCLPath = Join-Path $ClarionPath "bin\ClarionCL.exe"
     
-    try {
-        # Step 1: Build TXA from APV files
-        Write-Info "  Building TXA for $AppName..."
-        $vcFolderFull = Join-Path (Get-Location) $VCFolder
-        $upstxaFull = Join-Path (Get-Location) $upstxaFile
-        
-        if (-not (Test-Path $vcFolderFull)) {
-            Write-Warning "  VC folder not found: $vcFolderFull"
-            return $false
-        }
-        
-        $buildArgs = "/quiet /ConfigDir `"$ConfigDir`" COMMAND=BUILDTXA INPUT=`"$vcFolderFull`" OUTPUT=`"$upstxaFull`" APPNAME=`"$AppName`""
-        $process = Start-Process -FilePath $claInterfacePath -ArgumentList $buildArgs -Wait -NoNewWindow -PassThru
-        
-        if ($process.ExitCode -ne 0) {
-            Write-Warning "  Failed to build TXA for $AppName (exit code: $($process.ExitCode))"
-            return $false
-        }
-        
-        if (-not (Test-Path $upstxaFull)) {
-            Write-Warning "  TXA file not created for $AppName"
-            return $false
-        }
-        
-        # Step 2: Import TXA into APP
-        Write-Info "  Importing $AppName..."
-        $importArgs = "/ConfigDir `"$ConfigDir`" /ai $AppFile $upstxaFile"
-        $process = Start-Process -FilePath $clarionCLPath -ArgumentList $importArgs -Wait -NoNewWindow -PassThru
-        
-        if ($process.ExitCode -ne 0) {
-            Write-Warning "  Failed to import $AppName (exit code: $($process.ExitCode))"
-            return $false
-        }
-        
-        # Step 3: Clean up TXA file
-        if (Test-Path $upstxaFull) {
-            Remove-Item $upstxaFull -Force
-        }
-        
-        Write-Success "  + $AppName imported successfully"
-        return $true
-        
-    } catch {
-        Write-Warning "  Error importing ${AppName}: $_"
+    $vcFolderFull = if ([System.IO.Path]::IsPathRooted($VCFolder)) { $VCFolder } else { Join-Path (Get-Location) $VCFolder }
+    $upstxaFull = Join-Path (Get-Location) $upstxaFile
+
+    if (-not (Test-Path $vcFolderFull)) {
+        Write-Warning "  VC folder not found: $vcFolderFull"
         return $false
     }
+
+    # Clarion intermittently fails the TXA import with a bogus
+    # "You need a more recent version of Clarion" (GENE000 / GENE003).
+    # It is transient (not an actual version mismatch), so retry the
+    # build-TXA + import a couple of times before giving up.
+    $maxAttempts = 3   # initial attempt + 2 retries
+    for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
+        try {
+            if ($attempt -gt 1) {
+                Write-Warning "  Retrying $AppName import (attempt $attempt of $maxAttempts)..."
+                Start-Sleep -Seconds 2
+            }
+
+            # Step 1: Build TXA from APV files
+            Write-Info "  Building TXA for $AppName..."
+            $buildArgs = "/quiet /ConfigDir `"$ConfigDir`" COMMAND=BUILDTXA INPUT=`"$vcFolderFull`" OUTPUT=`"$upstxaFull`" APPNAME=`"$AppName`""
+            $process = Start-Process -FilePath $claInterfacePath -ArgumentList $buildArgs -Wait -NoNewWindow -PassThru
+            if ($process.ExitCode -ne 0) {
+                Write-Warning "  Failed to build TXA for $AppName (exit code: $($process.ExitCode))"
+                continue
+            }
+            if (-not (Test-Path $upstxaFull)) {
+                Write-Warning "  TXA file not created for $AppName"
+                continue
+            }
+
+            # Step 2: Import TXA into APP - capture output so we can detect the
+            # transient GENE000/GENE003 error (ClarionCL may still exit 0).
+            Write-Info "  Importing $AppName..."
+            $importOut = [System.IO.Path]::GetTempFileName()
+            $importErr = [System.IO.Path]::GetTempFileName()
+            $importArgs = "/ConfigDir `"$ConfigDir`" /ai $AppFile $upstxaFile"
+            $process = Start-Process -FilePath $clarionCLPath -ArgumentList $importArgs -Wait -NoNewWindow -PassThru -RedirectStandardOutput $importOut -RedirectStandardError $importErr
+
+            $importText = ''
+            if (Test-Path $importOut) { $importText += (Get-Content -Raw $importOut -ErrorAction SilentlyContinue) }
+            if (Test-Path $importErr) { $importText += (Get-Content -Raw $importErr -ErrorAction SilentlyContinue) }
+            Remove-Item $importOut, $importErr -Force -ErrorAction SilentlyContinue
+            if ($importText -and $importText.Trim()) { Write-Host $importText }
+
+            $transientError = $importText -match 'GENE000|GENE003|more recent version of Clarion|Error importing txa'
+
+            if ($process.ExitCode -ne 0 -or $transientError) {
+                if ($transientError) {
+                    Write-Warning "  Transient Clarion import error for $AppName (GENE000/GENE003) - will retry"
+                } else {
+                    Write-Warning "  Failed to import $AppName (exit code: $($process.ExitCode))"
+                }
+                continue
+            }
+
+            # Step 3: Success - clean up TXA file
+            if (Test-Path $upstxaFull) { Remove-Item $upstxaFull -Force }
+            Write-Success "  + $AppName imported successfully"
+            return $true
+
+        } catch {
+            Write-Warning "  Error importing ${AppName} (attempt ${attempt}): $_"
+            continue
+        }
+    }
+
+    Write-Warning "  Import failed for $AppName after $maxAttempts attempts"
+    return $false
 }
 
 Write-Host "`n=== Accura Build Automation ===" -ForegroundColor Magenta
@@ -710,13 +750,22 @@ if (Test-Path $patchDir) {
     Write-Host "`n--- Applying Project Patches ---" -ForegroundColor Magenta
     $patchCount = 0
     
-    # NOTE: dataM0.CLW must be excluded for SQL builds to compile successfully.
-    # For TPS builds, Clarion generation automatically adds dataM0.CLW back to the .cwproj,
-    # so this patch doesn't affect TPS builds negatively.
-    if (Test-Path "$patchDir\data.cwproj") {
-        Copy-Item "$patchDir\data.cwproj" -Destination "data.cwproj" -Force
-        Write-Info "Applied data.cwproj patch (excludes dataM0.CLW from build)"
-        $patchCount++
+    # dataM0.CLW must be excluded for SQL builds to compile successfully.
+    # Do this surgically on the repo's own data.cwproj instead of stamping a
+    # hand-maintained copy over it - that copy went stale and dragged in modules
+    # for procedures that no longer exist. The repo file stays authoritative.
+    # TPS keeps dataM0 (the repo lists it and generation regenerates it), so we
+    # only touch the file for SQL.
+    if ($Mode -eq 'SQL' -and (Test-Path "data.cwproj")) {
+        $cwproj = Get-Content -Raw "data.cwproj"
+        $pattern = '(?s)\r?\n\s*<Compile Include="dataM0\.CLW">.*?</Compile>'
+        if ($cwproj -match $pattern) {
+            ($cwproj -replace $pattern, '') | Set-Content -NoNewline "data.cwproj"
+            Write-Info "SQL build: removed dataM0.CLW from data.cwproj"
+            $patchCount++
+        } else {
+            Write-Info "SQL build: dataM0.CLW not present in data.cwproj (nothing to remove)"
+        }
     }
     
     # Client has added ODBC driver and classes reference to repo - patch no longer needed
@@ -755,16 +804,23 @@ if ($ImportApps) {
 
     # Register all templates from mapping file
     Write-Host "`n--- Registering Templates ---" -ForegroundColor Magenta
-    Register-Templates -ClarionPath $clarion10Path -ConfigDir $modeConfigDir
-    
+    Register-Templates -ClarionPath $clarion10Path -ConfigDir $modeConfigDir | Out-Null
+
+    Write-Host "`n--- Discovering Solution Apps ---" -ForegroundColor Magenta
+    Write-Info "  Working directory: $((Get-Location).Path)"
     $solutionFile = "accura.sln"
+    Write-Info "  Looking for solution: $solutionFile"
     if (-not (Test-Path $solutionFile)) {
-        Write-Error-Custom "Solution file not found: $solutionFile"
+        Write-Error-Custom "Solution file not found: $solutionFile (cwd: $((Get-Location).Path))"
         exit 1
     }
-    
+    Write-Success "  Solution found"
+
     $apps = Get-SolutionApps $solutionFile
-    Write-Info "Found $($apps.Count) apps in solution"
+    Write-Success "  Found $($apps.Count) app(s) in solution"
+    foreach ($a in $apps) {
+        Write-Host ("    - {0,-30} -> {1}" -f $a.Name, $a.VCFolder) -ForegroundColor DarkGray
+    }
     
     # Load import cache
     $importCacheFile = Join-Path (Get-Location) "vcDevelopment\.import-cache.json"
@@ -786,7 +842,7 @@ if ($ImportApps) {
     $skippedCount = 0
     
     foreach ($app in $apps) {
-        $vcFolderFull = Join-Path (Get-Location) $app.VCFolder
+        $vcFolderFull = if ([System.IO.Path]::IsPathRooted($app.VCFolder)) { $app.VCFolder } else { Join-Path (Get-Location) $app.VCFolder }
         $currentHash = if (Test-Path $vcFolderFull) { Get-VCFolderHash $vcFolderFull } else { $null }
         $cachedHash = $importCache[$app.Name]
 
@@ -804,6 +860,11 @@ if ($ImportApps) {
             $failCount++
             # Remove from cache so it retries next build
             $importCache.Remove($app.Name)
+            # A failed import (after retries) means a broken/stale .app - continuing
+            # would only cascade into confusing generation/compile errors, so stop now.
+            $importCache | ConvertTo-Json | Set-Content $importCacheFile
+            Write-Error-Custom "Import failed for $($app.Name) after retries - aborting build"
+            exit 1
         }
     }
 
@@ -843,7 +904,11 @@ if ($GenerateAll -or $BuildAll -or $GenerateBuildAll) {
     # Pass ConfigDir (mode-specific)
     $compileArgs += "-ConfigDir"
     $compileArgs += "`"$modeConfigDir`""
-    
+
+    # Pass Mode (controls mode-specific cwproj handling, e.g. SQL dataM0 exclusion)
+    $compileArgs += "-Mode"
+    $compileArgs += $Mode
+
     # Call compile.ps1
     $compileScript = Join-Path $PSScriptRoot "compile.ps1"
     

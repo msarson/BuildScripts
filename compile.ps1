@@ -63,7 +63,11 @@ param(
     [string]$ClarionPath,
 
     [Parameter()]
-    [string]$ConfigDir
+    [string]$ConfigDir,
+
+    [Parameter()]
+    [ValidateSet('TPS','SQL','')]
+    [string]$Mode = ''
 )
 
 # If no mode specified, default to GenerateBuild
@@ -92,6 +96,23 @@ function Get-ClarionPathFromConfig {
         return $config.clarion10Path
     }
     return $null
+}
+
+function Get-VcOutputFolder {
+    param([string]$SolutionDir)
+    $ini = Join-Path $SolutionDir "up_vcSettings.ini"
+    if (-not (Test-Path $ini)) {
+        throw "up_vcSettings.ini not found in '$SolutionDir'. Cannot determine VC output folder."
+    }
+    $line = Get-Content $ini | Where-Object { $_ -match '^OutputFolder\s*=' } | Select-Object -First 1
+    if (-not $line) {
+        throw "OutputFolder not found in '$ini'. Cannot determine VC output folder."
+    }
+    $folder = ($line -split '=', 2)[1].Trim()
+    if (-not $folder) {
+        throw "OutputFolder is empty in '$ini'. Cannot determine VC output folder."
+    }
+    return $folder
 }
 
 #endregion
@@ -320,13 +341,22 @@ if (Test-Path $patchDir) {
     Write-Host "`n--- Applying Project Patches ---" -ForegroundColor Magenta
     $patchCount = 0
     
-    # NOTE: dataM0.CLW must be excluded for SQL builds to compile successfully.
-    # For TPS builds, Clarion generation automatically adds dataM0.CLW back to the .cwproj,
-    # so this patch doesn't affect TPS builds negatively.
-    if (Test-Path "$patchDir\data.cwproj") {
-        Copy-Item "$patchDir\data.cwproj" -Destination "data.cwproj" -Force
-        Write-Info "Applied data.cwproj patch (excludes dataM0.CLW from build)"
-        $patchCount++
+    # dataM0.CLW must be excluded for SQL builds to compile successfully.
+    # Do this surgically on the repo's own data.cwproj instead of stamping a
+    # hand-maintained copy over it - that copy went stale and dragged in modules
+    # for procedures that no longer exist. The repo file stays authoritative.
+    # TPS keeps dataM0 (the repo lists it and generation regenerates it), so we
+    # only touch the file for SQL.
+    if ($Mode -eq 'SQL' -and (Test-Path "data.cwproj")) {
+        $cwproj = Get-Content -Raw "data.cwproj"
+        $pattern = '(?s)\r?\n\s*<Compile Include="dataM0\.CLW">.*?</Compile>'
+        if ($cwproj -match $pattern) {
+            ($cwproj -replace $pattern, '') | Set-Content -NoNewline "data.cwproj"
+            Write-Info "SQL build: removed dataM0.CLW from data.cwproj"
+            $patchCount++
+        } else {
+            Write-Info "SQL build: dataM0.CLW not present in data.cwproj (nothing to remove)"
+        }
     }
     
     # Client has added ODBC driver and classes reference to repo - patch no longer needed
@@ -510,7 +540,7 @@ if ($GenerateOnly -or $GenerateBuild) {
                 }
 
                 # If the .app could not be opened, try re-importing from vcDevelopment then retry generation once
-                $vcFolder = Join-Path $solutionDir "vcDevelopment\$appName"
+                $vcFolder = Join-Path (Get-VcOutputFolder $solutionDir) $appName
                 $claInterfacePath = "C:\Program Files (x86)\UpperParkSolutions\claInterface\ClaInterface.exe"
                 $upstxaFile = Join-Path $solutionDir "$appName.upstxa"
                 $retried = $false
