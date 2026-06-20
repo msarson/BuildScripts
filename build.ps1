@@ -927,50 +927,43 @@ if ($ImportApps) {
 # Generate and/or build if requested
 if ($GenerateAll -or $BuildAll -or $GenerateBuildAll) {
     Write-Host "`n--- Compilation ---" -ForegroundColor Magenta
-    
-    # Prepare compile.ps1 arguments
-    $compileArgs = @()
-    
-    if ($GenerateAll) {
-        $compileArgs += "-GenerateOnly"
-    } elseif ($BuildAll) {
-        $compileArgs += "-BuildOnly"
-    } elseif ($GenerateBuildAll) {
-        $compileArgs += "-GenerateBuild"
+
+    $buildConfiguration = if ($DebugBuild) { 'Debug' } else { 'Release' }
+    $doGenerate = $GenerateAll -or $GenerateBuildAll
+    $doBuild    = $BuildAll   -or $GenerateBuildAll
+
+    # Clear previous build logs ONCE here. The phase scripts (generate.ps1 /
+    # compile.ps1) no longer clear logs, so the build phase cannot wipe the
+    # generate phase's logs.
+    $boDir = Join-Path (Get-Location) "build-output"
+    if (Test-Path $boDir) {
+        Get-ChildItem -Path $boDir -Recurse -Filter "*.log" -File -ErrorAction SilentlyContinue | ForEach-Object { [System.IO.File]::Delete($_.FullName) }
     }
-    
-    # Pass Configuration
-    $compileArgs += "-Configuration"
-    $compileArgs += if ($DebugBuild) { 'Debug' } else { 'Release' }
-    
-    # Pass Clarion path
-    $compileArgs += "-ClarionPath"
-    $compileArgs += "`"$clarion10Path`""
 
-    # Pass ConfigDir (mode-specific)
-    $compileArgs += "-ConfigDir"
-    $compileArgs += "`"$modeConfigDir`""
-
-    # Pass Mode (controls mode-specific cwproj handling, e.g. SQL dataM0 exclusion)
-    $compileArgs += "-Mode"
-    $compileArgs += $Mode
-
-    # Call compile.ps1
-    $compileScript = Join-Path $PSScriptRoot "compile.ps1"
-    
-    if (-not (Test-Path $compileScript)) {
-        Write-Error-Custom "compile.ps1 not found at: $compileScript"
-        exit 1
+    # Each phase runs as its own child process: exit codes are isolated and
+    # reported cleanly, and the phase output streams to the console.
+    function Invoke-Phase {
+        param([string]$ScriptName, [string[]]$PhaseArgs)
+        $script = Join-Path $PSScriptRoot $ScriptName
+        if (-not (Test-Path $script)) { Write-Error-Custom "$ScriptName not found at: $script"; exit 1 }
+        $psArgs = @('-NoProfile','-ExecutionPolicy','Bypass','-File',$script) + $PhaseArgs
+        $p = Start-Process -FilePath 'powershell.exe' -ArgumentList $psArgs -WorkingDirectory (Get-Location).Path -NoNewWindow -Wait -PassThru
+        return $p.ExitCode
     }
-    
-    Write-Info "Calling compile.ps1..."
-    
-    $compileCommand = "& `"$compileScript`" $($compileArgs -join " ")"
-    Invoke-Expression $compileCommand
-    
-    if ($LASTEXITCODE -ne 0) {
-        Write-Error-Custom "Compilation failed"
-        exit 1
+
+    $commonArgs = @('-Configuration',$buildConfiguration,'-ClarionPath',$clarion10Path,'-ConfigDir',$modeConfigDir)
+    if ($Mode) { $commonArgs += @('-Mode',$Mode) }
+
+    if ($doGenerate) {
+        Write-Info "Calling generate.ps1..."
+        $code = Invoke-Phase 'generate.ps1' $commonArgs
+        if ($code -ne 0) { Write-Error-Custom "Generation failed (exit $code)"; exit 1 }
+    }
+
+    if ($doBuild) {
+        Write-Info "Calling compile.ps1..."
+        $code = Invoke-Phase 'compile.ps1' (@('-BuildOnly') + $commonArgs)
+        if ($code -ne 0) { Write-Error-Custom "Compilation failed (exit $code)"; exit 1 }
     }
 }
 
