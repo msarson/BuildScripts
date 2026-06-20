@@ -657,7 +657,18 @@ if ($BuildOnly -or $GenerateBuild) {
     
     $buildOrder = Get-TopologicalOrder $dependencyGraph $hasCircularDepsRef
     $hasCircularDeps = $hasCircularDepsRef.Value
-    
+
+    # TEMP FIX: every app links classes.lib via <Library Include>, but none declare a
+    # <ProjectReference> to classes, so the topological sort can place 'classes' AFTER
+    # the apps that depend on it (notably 'data'), causing unresolved-external link
+    # failures against a stale classes.lib. Force 'classes' to the front of the build
+    # order so its .lib is always fresh before anything links it.
+    # TODO: remove once the apps declare a proper ProjectReference to classes.
+    if ($buildOrder -contains 'classes') {
+        $buildOrder = @('classes') + ($buildOrder | Where-Object { $_ -ne 'classes' })
+        Write-Info "Forced 'classes' to build first (links-everywhere base library)"
+    }
+
     if ($hasCircularDeps) {
         Write-Warning "Circular dependencies detected in solution"
         Write-Warning "Will build all projects in two passes to resolve circular dependencies"

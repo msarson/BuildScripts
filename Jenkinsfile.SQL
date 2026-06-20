@@ -46,7 +46,12 @@ pipeline {
                         ''').trim()
                     }
                     echo "Latest Accura branch (by commit date): ${env.ACCURA_BRANCH}"
-                    powershell "git checkout ${env.ACCURA_BRANCH}"
+                    // A bare 'git checkout <branch>' only switches to a pre-existing
+                    // local branch and does NOT advance it to the fetched origin tip,
+                    // so the workspace can build stale source (was 20 commits behind).
+                    // -f -B forces the local branch to point at origin/<branch>,
+                    // discarding any local workspace changes, so we always build HEAD.
+                    powershell "git checkout -f -B ${env.ACCURA_BRANCH} origin/${env.ACCURA_BRANCH}"
                 }
 
                 dir('Clarion') {
