@@ -35,6 +35,16 @@ pipeline {
                         credentialsId: 'github-ssh',
                         url: 'git@github.com:accuramis/accura.git'
 
+                    // Build server: never retain local workspace changes. Discard all
+                    // tracked modifications and remove untracked files so a checkout or
+                    // pull can never fail on a dirty tree. genfiles/* is gitignored, so
+                    // incremental build artifacts (e.g. classes.lib) are preserved
+                    // (no -x); the dedicated Clean stage manages build outputs.
+                    powershell '''
+                        git reset --hard
+                        git clean -ffd
+                    '''
+
                     // Trevor cuts new v###_Build# branches often, so always build the
                     // most recently committed one instead of a hardcoded branch.
                     script {
