@@ -24,8 +24,8 @@ $failedLogsDir  = $paths.FailedLogsDir
 
 # Generation resolves files via the Clarion bin redirection; ensure it is current.
 $clarionBinRed = Join-Path $ClarionPath "bin\Clarion100.red"
-if (Test-Path "C:\BuildScripts\RedFiles\Clarion100_bin.red") {
-    Copy-Item "C:\BuildScripts\RedFiles\Clarion100_bin.red" $clarionBinRed -Force
+if (Test-Path "$PSScriptRoot\RedFiles\Clarion100_bin.red") {
+    Copy-Item "$PSScriptRoot\RedFiles\Clarion100_bin.red" $clarionBinRed -Force
     Write-Info "Deployed Clarion100.red to Clarion bin"
 }
 Write-Host "`n--- Step 1: Generating Source Code ---" -ForegroundColor Magenta
@@ -39,7 +39,7 @@ if (-not (Test-Path $versionDir)) {
 }
 
 # Copy .version files from BuildScripts backup
-$versionBackup = "C:\BuildScripts\VersionFiles"
+$versionBackup = "$PSScriptRoot\VersionFiles"
 if (Test-Path $versionBackup) {
     Copy-Item "$versionBackup\*.Version" -Destination $versionDir -Force
     $copiedCount = (Get-ChildItem "$versionDir\*.Version").Count
@@ -70,7 +70,7 @@ foreach ($app in $apps) {
     
     try {
         $appLog = Join-Path $buildOutputDir "generate_$appName.log"
-        $effectiveConfigDir = if ($ConfigDir) { $ConfigDir } else { "C:\BuildScripts\ClarionConfig" }
+        $effectiveConfigDir = if ($ConfigDir) { $ConfigDir } else { "$PSScriptRoot\ClarionConfig" }
         
         $appErrLog = Join-Path $buildOutputDir "generate_$appName.err.log"
         $genProcess = Start-Process -FilePath $clarionCL `

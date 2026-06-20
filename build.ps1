@@ -39,7 +39,10 @@ param(
     [switch]$SkipGitOperations,  # Skip git operations (for CI/Jenkins)
 
     [Parameter()]
-    [switch]$DebugBuild  # Pass -DebugBuild for debug mode; default is Release
+    [switch]$DebugBuild,  # Pass -DebugBuild for debug mode; default is Release
+
+    [Parameter()]
+    [string]$ClarionPath  # Explicit Clarion path (CI). When set, skips config.json/prompt.
 )
 
 $ErrorActionPreference = "Stop"
@@ -180,7 +183,7 @@ function Setup-ModeSpecificConfig {
         [switch]$DebugBuild
     )
     
-    $baseConfigDir = "C:\BuildScripts\ClarionConfig"
+    $baseConfigDir = "$PSScriptRoot\ClarionConfig"
     # Put config in workspace so it's isolated per build and never shared between TPS/SQL
     $modeConfigDir = Join-Path (Get-Location) "ClarionConfig"
 
@@ -610,8 +613,8 @@ function Import-AppFromVC {
 Write-Host "`n=== Accura Build Automation ===" -ForegroundColor Magenta
 Write-Host ("Started: " + (Get-Date -Format "yyyy-MM-dd HH:mm:ss") + "`n") -ForegroundColor Gray
 
-# Get Clarion10 path from config (needed for both mode switching and building)
-$clarion10Path = Get-Clarion10Path -Mode $Mode
+# Get Clarion10 path: explicit -ClarionPath wins (CI), else config.json / prompt.
+$clarion10Path = if ($ClarionPath) { $ClarionPath } else { Get-Clarion10Path -Mode $Mode }
 
 # If mode is not specified, try to read from config.json
 if ([string]::IsNullOrWhiteSpace($Mode)) {
@@ -791,7 +794,7 @@ if ($Mode) {
 }
 
 # Apply project patches (temporary fixes until client updates)
-$patchDir = "C:\BuildScripts\ProjectPatches"
+$patchDir = "$PSScriptRoot\ProjectPatches"
 if (Test-Path $patchDir) {
     Write-Host "`n--- Applying Project Patches ---" -ForegroundColor Magenta
     $patchCount = 0
@@ -835,7 +838,7 @@ if ($ImportApps) {
     Write-Info "Using config directory: $modeConfigDir"
 
     # Apply any local template patches (temporary fixes until upstream Clarion repo is corrected)
-    $templatePatchDir = "C:\BuildScripts\TemplatePatches"
+    $templatePatchDir = "$PSScriptRoot\TemplatePatches"
     $templateDestDir = Join-Path $clarion10Path "accessory\template\win"
     if (Test-Path $templatePatchDir) {
         $patches = Get-ChildItem $templatePatchDir -Filter "*.tpl"

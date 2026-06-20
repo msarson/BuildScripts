@@ -85,7 +85,7 @@ Write-Host ("Started: " + (Get-Date -Format "yyyy-MM-dd HH:mm:ss")) -ForegroundC
 Write-Host ""
 
 # Apply project patches (temporary fixes until client updates)
-$patchDir = "C:\BuildScripts\ProjectPatches"
+$patchDir = "$PSScriptRoot\ProjectPatches"
 if (Test-Path $patchDir) {
     Write-Host "`n--- Applying Project Patches ---" -ForegroundColor Magenta
     $patchCount = 0
@@ -164,8 +164,8 @@ if ([string]::IsNullOrEmpty($solutionDir)) {
 # common genfiles\obj, genfiles\lib, genfiles\exp etc. folders.
 # The Accura local red is handled by build.ps1 (from BuildScripts\RedFiles\).
 $clarionBinRed = Join-Path $ClarionPath "bin\Clarion100.red"
-if (Test-Path "C:\BuildScripts\RedFiles\Clarion100_bin.red") {
-    Copy-Item "C:\BuildScripts\RedFiles\Clarion100_bin.red" $clarionBinRed -Force
+if (Test-Path "$PSScriptRoot\RedFiles\Clarion100_bin.red") {
+    Copy-Item "$PSScriptRoot\RedFiles\Clarion100_bin.red" $clarionBinRed -Force
     Write-Info "Deployed Clarion100.red to Clarion bin"
 }
 
@@ -304,7 +304,7 @@ if ($BuildOnly -or $GenerateBuild) {
             
             $projectBuildLog = Join-Path $buildOutputDir "build_${projectName}.log"
             
-            $effectiveConfigDir = if ($ConfigDir) { $ConfigDir } else { "C:\BuildScripts\ClarionConfig" }
+            $effectiveConfigDir = if ($ConfigDir) { $ConfigDir } else { "$PSScriptRoot\ClarionConfig" }
             $buildArgs = @(
                 "/property:GenerateFullPaths=true"
                 "/t:Rebuild"
