@@ -193,10 +193,17 @@ function Setup-ModeSpecificConfig {
     }
     New-Item -ItemType Directory -Path $modeConfigDir -Force | Out-Null
 
+    # The real ClarionProperties.xml is gitignored (machine-specific), so a fresh
+    # repo checkout only carries the tracked .example template. Fall back to it -
+    # Setup rewrites the Clarion.Versions paths below regardless, so the template
+    # is a valid base.
     $sourceXml = Join-Path $baseConfigDir "ClarionProperties.xml"
+    if (-not (Test-Path $sourceXml)) {
+        $sourceXml = Join-Path $baseConfigDir "ClarionProperties.xml.example"
+    }
     $destXml = Join-Path $modeConfigDir "ClarionProperties.xml"
     Copy-Item $sourceXml $destXml -Force
-    Write-Info "  Created fresh ClarionConfig in workspace"
+    Write-Info "  Created fresh ClarionConfig in workspace (base: $(Split-Path $sourceXml -Leaf))"
     
     # Update ClarionProperties.xml with correct version path
     $propsFile = Join-Path $modeConfigDir "ClarionProperties.xml"
