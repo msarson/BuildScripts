@@ -79,6 +79,19 @@ pipeline {
             }
         }
 
+        stage('Checkout Build Scripts') {
+            steps {
+                echo 'Checking out BuildScripts (pipeline scripts) from repo...'
+                // Run the pipeline scripts from a per-workspace checkout of the public
+                // BuildScripts repo rather than the local C:\BuildScripts disk copy, so
+                // what runs always matches a committed revision (no live-disk drift).
+                dir('BuildScripts') {
+                    git branch: 'master',
+                        url: 'https://github.com/msarson/BuildScripts.git'
+                }
+            }
+        }
+
         stage('Clean Build Artifacts') {
             when {
                 expression { currentBuild.number > 1 }
@@ -110,7 +123,7 @@ pipeline {
 
                     dir('Accura') {
                         powershell '''
-                            C:\\BuildScripts\\build.ps1 -Mode TPS -ImportApps -GenerateBuildAll -SkipGitOperations -DebugBuild
+                            & "$env:WORKSPACE\\BuildScripts\\build.ps1" -Mode TPS -ImportApps -GenerateBuildAll -SkipGitOperations -DebugBuild -ClarionPath "..\\Clarion"
                         '''
                     }
 
