@@ -396,17 +396,18 @@ function Register-Templates {
     $trfFile   = Join-Path $ClarionPath "template\win\TemplateRegistry10.trf"
     $cacheFile = Join-Path $ClarionPath "template\win\.trf-cache-key"
 
-    # Caching disabled -- always register every template fresh.
-    Write-Info "  Cache disabled -- registering all templates fresh on every build"
+    # Keep the TRF warm across builds. *.trf is gitignored in the Clarion repo and the
+    # Clarion checkout is never reset/cleaned, so the registry persists between builds.
+    # Combined with Reregister_if_changed=on (set in ClarionProperties), ClarionCL
+    # auto-reregisters any CHANGED template during generation, so here we only need to
+    # register templates that are MISSING from the registry -- not all of them every
+    # build -- which makes the registration phase near-instant when the TRF is warm.
     if (Test-Path $trfFile) {
-        Remove-Item $trfFile -Force
-        Write-Info "  Deleted existing TRF to force fresh registration"
+        Write-Info ("  Warm TRF found ({0:N0} MB) -- will register only missing templates" -f ((Get-Item $trfFile).Length / 1MB))
+    } else {
+        Write-Info "  No TRF found -- cold start, will register all templates"
     }
-    if (Test-Path $cacheFile) {
-        Remove-Item $cacheFile -Force
-        Write-Info "  Removed stale cache key file"
-    }
-    
+
     # Use template-mapping.json from workspace Clarion/Jenkins folder
     $mappingFile = Join-Path $ClarionPath "Jenkins\template-mapping.json"
     $clarionCL = Join-Path $ClarionPath "bin\ClarionCL.exe"
@@ -435,16 +436,37 @@ function Register-Templates {
         
         $registered = 0
         $failed = 0
+        $skipped = 0
         $timings = @()
         $totalStopwatch = [System.Diagnostics.Stopwatch]::StartNew()
-        
+
+        # Ask the registry which templates are already registered (/tl returns one
+        # template name per line). Anything already present is skipped here;
+        # Reregister_if_changed=on refreshes changed ones during generation. If /tl
+        # returns nothing (cold or unresolved registry), $registeredSet stays empty
+        # and we fall back to registering every template, as before.
+        $registeredSet = New-Object System.Collections.Generic.HashSet[string] ([System.StringComparer]::OrdinalIgnoreCase)
+        if (Test-Path $trfFile) {
+            $tlOut = & $clarionCL "/ConfigDir" $ConfigDir "/tl" 2>$null
+            foreach ($line in $tlOut) {
+                $name = "$line".Trim()
+                if ($name -and $name -ne 'None') { [void]$registeredSet.Add($name) }
+            }
+            Write-Info "  /tl reports $($registeredSet.Count) templates already registered"
+        }
+
         # Register templates by directory
         foreach ($dir in $mappingData) {
             $dirPath = Join-Path $ClarionPath $dir.directory
-            
+
             foreach ($template in $dir.templates) {
+                if ($registeredSet.Contains($template.name)) {
+                    $skipped++
+                    continue
+                }
+
                 $templatePath = Join-Path $dirPath $template.file
-                
+
                 if (Test-Path $templatePath) {
                     $sw = [System.Diagnostics.Stopwatch]::StartNew()
                     $result = & $clarionCL "/ConfigDir" $ConfigDir "/tr" $templatePath 2>&1
@@ -473,7 +495,7 @@ function Register-Templates {
             Write-Host ("    {0,6:F2}s  {1}" -f $_.Seconds, $_.Name) -ForegroundColor Cyan
         }
         
-        Write-Success ("  + Registered $registered templates (failed: $failed) in {0:F1}s total" -f $totalStopwatch.Elapsed.TotalSeconds)
+        Write-Success ("  + Registered $registered, skipped $skipped already-registered (failed: $failed) in {0:F1}s total" -f $totalStopwatch.Elapsed.TotalSeconds)
 
         return ($failed -eq 0)
     }
