@@ -329,6 +329,26 @@ function Setup-ModeSpecificConfig {
     $propsXml.Save($propsFile)
     Write-Info "  Set SharpDevelop.UseReleaseAsDefault = $useRelease"
 
+    # Ensure the template Registry option "Reregister templates if changed" is ON
+    # (Tools > Application Options > Registry tab). Without it, ClarionCL will not
+    # re-register a template that has changed on disk, so generation can run against
+    # a stale registered template chain and emit out-of-date source.
+    $regXml = [xml](Get-Content $propsFile)
+    $registryNode = $regXml.SelectSingleNode("//Properties[@name='Registry']")
+    if (-not $registryNode) {
+        $registryNode = $regXml.CreateElement("Properties")
+        $registryNode.SetAttribute("name", "Registry")
+        $regXml.DocumentElement.AppendChild($registryNode) | Out-Null
+    }
+    $reregNode = $registryNode.SelectSingleNode("Reregister_if_changed")
+    if (-not $reregNode) {
+        $reregNode = $regXml.CreateElement("Reregister_if_changed")
+        $registryNode.AppendChild($reregNode) | Out-Null
+    }
+    $reregNode.SetAttribute("value", "on")
+    $regXml.Save($propsFile)
+    Write-Info "  Set Registry > Reregister_if_changed = on"
+
     return $modeConfigDir
 }
 
