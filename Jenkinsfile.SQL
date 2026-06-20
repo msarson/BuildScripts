@@ -119,10 +119,15 @@ pipeline {
                 lock('clarion-generator') {
                     echo 'Acquired Clarion generator lock - starting Accura SQL build...'
 
-                    dir('Accura') {
-                        powershell '''
-                            & "$env:WORKSPACE\\BuildScripts\\build.ps1" -Mode SQL -ImportApps -GenerateBuildAll -SkipGitOperations -DebugBuild -ClarionPath "..\\Clarion"
-                        '''
+                    // Materialise the licensed ClarionProperties.xml (Clarion serial)
+                    // from the Jenkins Secret file credential; build.ps1 reads its path
+                    // via $env:CLARION_CONFIG_XML. Keeps the serial out of the repo/logs.
+                    withCredentials([file(credentialsId: 'clarion-license-config', variable: 'CLARION_CONFIG_XML')]) {
+                        dir('Accura') {
+                            powershell '''
+                                & "$env:WORKSPACE\\BuildScripts\\build.ps1" -Mode SQL -ImportApps -GenerateBuildAll -SkipGitOperations -DebugBuild -ClarionPath "..\\Clarion"
+                            '''
+                        }
                     }
 
                     echo 'Build completed'
