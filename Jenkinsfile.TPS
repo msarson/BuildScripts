@@ -9,6 +9,11 @@ pipeline {
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
         timeout(time: 2, unit: 'HOURS')
+        // Only one build of this pipeline at a time. All builds share a single
+        // customWorkspace, so a second concurrent build would git reset/clean the
+        // tree the first is still compiling. Extra triggers queue until the current
+        // build finishes (Jenkins coalesces multiple queued triggers into one).
+        disableConcurrentBuilds()
     }
 
     triggers {

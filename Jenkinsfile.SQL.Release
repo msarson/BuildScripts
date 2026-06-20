@@ -9,12 +9,15 @@ pipeline {
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
         timeout(time: 2, unit: 'HOURS')
+        // Only one build of this pipeline at a time. All builds share a single
+        // customWorkspace, so a second concurrent build would git reset/clean the
+        // tree the first is still compiling. Extra triggers queue until the current
+        // build finishes (Jenkins coalesces multiple queued triggers into one).
+        disableConcurrentBuilds()
     }
 
-    triggers {
-        // Check for changes every hour
-        pollSCM('H * * * *')
-    }
+    // No SCM trigger: the SQL release build is started MANUALLY only and must
+    // never auto-kick off when a change is detected.
 
     stages {
         stage('Notify Started') {
