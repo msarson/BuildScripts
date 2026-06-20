@@ -193,17 +193,27 @@ function Setup-ModeSpecificConfig {
     }
     New-Item -ItemType Directory -Path $modeConfigDir -Force | Out-Null
 
-    # The real ClarionProperties.xml is gitignored (machine-specific), so a fresh
-    # repo checkout only carries the tracked .example template. Fall back to it -
-    # Setup rewrites the Clarion.Versions paths below regardless, so the template
-    # is a valid base.
+    # Resolve the base ClarionProperties.xml. The real file carries the Clarion
+    # license SERIAL, which must never be committed to the (public) repo - so it is
+    # gitignored and only the placeholder .example template is tracked. Priority:
+    #   1. This location's real file (local run from C:\BuildScripts)
+    #   2. The machine-provisioned licensed config (env CLARION_CONFIG_XML, else the
+    #      conventional C:\BuildScripts copy) - used when running from a fresh checkout
+    #   3. The .example template - has a placeholder serial, so Clarion licensing WILL
+    #      fail; last resort only, with a clear warning.
     $sourceXml = Join-Path $baseConfigDir "ClarionProperties.xml"
     if (-not (Test-Path $sourceXml)) {
-        $sourceXml = Join-Path $baseConfigDir "ClarionProperties.xml.example"
+        $machineXml = if ($env:CLARION_CONFIG_XML) { $env:CLARION_CONFIG_XML } else { "C:\BuildScripts\ClarionConfig\ClarionProperties.xml" }
+        if (Test-Path $machineXml) {
+            $sourceXml = $machineXml
+        } else {
+            $sourceXml = Join-Path $baseConfigDir "ClarionProperties.xml.example"
+            Write-Warning "  No licensed ClarionProperties.xml found ($machineXml); using placeholder template - Clarion licensing will fail. Provision the license on this agent."
+        }
     }
     $destXml = Join-Path $modeConfigDir "ClarionProperties.xml"
     Copy-Item $sourceXml $destXml -Force
-    Write-Info "  Created fresh ClarionConfig in workspace (base: $(Split-Path $sourceXml -Leaf))"
+    Write-Info "  Created fresh ClarionConfig in workspace (base: $sourceXml)"
     
     # Update ClarionProperties.xml with correct version path
     $propsFile = Join-Path $modeConfigDir "ClarionProperties.xml"
