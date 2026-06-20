@@ -911,6 +911,17 @@ if ($BuildOnly -or $GenerateBuild) {
                             }
                         }
                         
+                        # On the final pass of a multi-pass (circular-dependency) build a
+                        # compile failure cannot resolve -- every dependency has already
+                        # been built by now -- so the project is never going to compile.
+                        # Terminate immediately instead of grinding through the rest.
+                        if ($maxPasses -gt 1 -and $pass -eq $maxPasses) {
+                            Write-Host ""
+                            Write-Host "  *** $projectName failed on the final pass ($pass of $maxPasses) - it will not compile. Aborting build. ***" -ForegroundColor Red
+                            Write-Error-Custom "`nBuild aborted: '$projectName' failed on pass $pass and cannot be resolved"
+                            exit 1
+                        }
+
                         # Critical projects - fail immediately regardless of other settings
                         if ($projectName -in @('classes', 'data')) {
                             Write-Host ""
