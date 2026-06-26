@@ -35,10 +35,22 @@ pipeline {
                 echo 'Checking out Accura and Clarion repositories...'
 
                 dir('Accura') {
-                    // Initial checkout - also fetches all remote-tracking branches
-                    git branch: 'master',
-                        credentialsId: 'github-ssh',
-                        url: 'git@github.com:accuramis/accura.git'
+                    // Initial checkout. The branch spec is a WILDCARD over the
+                    // v###_Build# branches (not 'master') so Jenkins' SCM polling
+                    // wakes on a push to ANY of them. Trevor cuts new build branches
+                    // often and rarely merges to master, so polling 'master' never
+                    // fired for the branch actually being built. The 'latest by commit
+                    // date' logic below still pins the build to the single newest one.
+                    // The default refspec still fetches all remote-tracking branches
+                    // (needed by the for-each-ref selection below).
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: '*/v*_Build*']],
+                        userRemoteConfigs: [[
+                            url: 'git@github.com:accuramis/accura.git',
+                            credentialsId: 'github-ssh'
+                        ]]
+                    ])
 
                     // Build server: never retain local workspace changes. Discard all
                     // tracked modifications and remove untracked files so a checkout or
