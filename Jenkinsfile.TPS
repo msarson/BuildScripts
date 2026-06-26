@@ -7,7 +7,10 @@ pipeline {
     }
 
     options {
-        buildDiscarder(logRotator(numToKeepStr: '10'))
+        // Hourly heartbeat (see triggers) means most builds are cheap "no change"
+        // skips, so keep plenty of history by days as well as count, otherwise real
+        // build logs get rotated out within hours.
+        buildDiscarder(logRotator(daysToKeepStr: '21', numToKeepStr: '250'))
         timeout(time: 2, unit: 'HOURS')
         // Only one build of this pipeline at a time. All builds share a single
         // customWorkspace, so a second concurrent build would git reset/clean the
@@ -17,40 +20,27 @@ pipeline {
     }
 
     triggers {
-        // Check for changes every hour
-        pollSCM('H * * * *')
+        // Hourly heartbeat. Fires unconditionally; the 'Determine Build Branch' stage
+        // decides whether there is actually new work and skips the heavy Clarion build
+        // when the latest branch tip has already been built. We use a timer rather than
+        // pollSCM because the build always targets the *latest* v###_Build# branch
+        // (picked by commit date): a branch-wildcard pollSCM matches ~70 stale build
+        // branches that look "never built" and so retriggers every hour regardless,
+        // while pinning pollSCM to a single branch misses brand-new branches.
+        cron('H * * * *')
     }
 
     stages {
-        stage('Notify Started') {
+        stage('Determine Build Branch') {
             steps {
-                emailext subject: "🔨 Accura TPS Build #${BUILD_NUMBER} - Started",
-                         body: "Build #${BUILD_NUMBER} has started.\n\nView progress: ${BUILD_URL}console",
-                         to: 'mark@marksarson.com'
-            }
-        }
-
-        stage('Checkout Repositories') {
-            steps {
-                echo 'Checking out Accura and Clarion repositories...'
+                echo 'Checking out Accura and selecting the latest build branch...'
 
                 dir('Accura') {
-                    // Initial checkout. The branch spec is a WILDCARD over the
-                    // v###_Build# branches (not 'master') so Jenkins' SCM polling
-                    // wakes on a push to ANY of them. Trevor cuts new build branches
-                    // often and rarely merges to master, so polling 'master' never
-                    // fired for the branch actually being built. The 'latest by commit
-                    // date' logic below still pins the build to the single newest one.
-                    // The default refspec still fetches all remote-tracking branches
-                    // (needed by the for-each-ref selection below).
-                    checkout([
-                        $class: 'GitSCM',
-                        branches: [[name: '*/v*_Build*']],
-                        userRemoteConfigs: [[
-                            url: 'git@github.com:accuramis/accura.git',
-                            credentialsId: 'github-ssh'
-                        ]]
-                    ])
+                    // Fetch all remote-tracking branches (default refspec) so the
+                    // latest-branch selection below can see every v###_Build#.
+                    git branch: 'master',
+                        credentialsId: 'github-ssh',
+                        url: 'git@github.com:accuramis/accura.git'
 
                     // Build server: never retain local workspace changes. Discard all
                     // tracked modifications and remove untracked files so a checkout or
@@ -73,13 +63,54 @@ pipeline {
                         ''').trim()
                     }
                     echo "Latest Accura branch (by commit date): ${env.ACCURA_BRANCH}"
+
                     // A bare 'git checkout <branch>' only switches to a pre-existing
                     // local branch and does NOT advance it to the fetched origin tip,
                     // so the workspace can build stale source (was 20 commits behind).
                     // -f -B forces the local branch to point at origin/<branch>,
                     // discarding any local workspace changes, so we always build HEAD.
                     powershell "git checkout -f -B ${env.ACCURA_BRANCH} origin/${env.ACCURA_BRANCH}"
+
+                    // Decide whether there is anything new to build. Compare the tip we
+                    // are about to build against the SHA recorded by the last build
+                    // attempt (stored in the workspace ROOT - outside Accura/ so
+                    // 'git clean' never removes it). If unchanged, skip the expensive
+                    // Clarion generate+compile. We key on SHA, not commit age, so a
+                    // newly pushed branch whose tip commit happens to be hours old is
+                    // still built, and a single commit is never rebuilt twice.
+                    script {
+                        env.ACCURA_TIP = powershell(returnStdout: true, script: 'git rev-parse HEAD').trim()
+                        def marker = "${env.WORKSPACE}\\.tps-last-built-sha"
+                        def lastBuilt = powershell(returnStdout: true, script: """
+                            if (Test-Path '${marker}') { (Get-Content '${marker}' -Raw).Trim() } else { '' }
+                        """).trim()
+                        if (env.ACCURA_TIP == lastBuilt) {
+                            env.SHOULD_BUILD = 'false'
+                            echo "No new commits on ${env.ACCURA_BRANCH} (tip ${env.ACCURA_TIP.take(10)} already built) - skipping heavy build."
+                            currentBuild.result = 'NOT_BUILT'
+                            currentBuild.description = "No change: ${env.ACCURA_BRANCH} @ ${env.ACCURA_TIP.take(10)}"
+                        } else {
+                            env.SHOULD_BUILD = 'true'
+                            currentBuild.description = "Build ${env.ACCURA_BRANCH} @ ${env.ACCURA_TIP.take(10)}"
+                        }
+                    }
                 }
+            }
+        }
+
+        stage('Notify Started') {
+            when { expression { env.SHOULD_BUILD == 'true' } }
+            steps {
+                emailext subject: "🔨 Accura TPS Build #${BUILD_NUMBER} - Started (${env.ACCURA_BRANCH})",
+                         body: "Build #${BUILD_NUMBER} has started on ${env.ACCURA_BRANCH}.\n\nView progress: ${BUILD_URL}console",
+                         to: 'mark@marksarson.com'
+            }
+        }
+
+        stage('Checkout Clarion & Build Scripts') {
+            when { expression { env.SHOULD_BUILD == 'true' } }
+            steps {
+                echo 'Checking out Clarion and BuildScripts...'
 
                 dir('Clarion') {
                     git branch: 'TPS',
@@ -87,13 +118,6 @@ pipeline {
                         url: 'git@github.com:accuramis/Clarion10.git'
                 }
 
-                echo 'Repositories checked out successfully'
-            }
-        }
-
-        stage('Checkout Build Scripts') {
-            steps {
-                echo 'Checking out BuildScripts (pipeline scripts) from repo...'
                 // Run the pipeline scripts from a per-workspace checkout of the public
                 // BuildScripts repo rather than the local C:\BuildScripts disk copy, so
                 // what runs always matches a committed revision (no live-disk drift).
@@ -101,12 +125,17 @@ pipeline {
                     git branch: 'master',
                         url: 'https://github.com/msarson/BuildScripts.git'
                 }
+
+                echo 'Repositories checked out successfully'
             }
         }
 
         stage('Clean Build Artifacts') {
             when {
-                expression { currentBuild.number > 1 }
+                allOf {
+                    expression { env.SHOULD_BUILD == 'true' }
+                    expression { currentBuild.number > 1 }
+                }
             }
             steps {
                 echo 'Cleaning generated source and build-output (incremental build)...'
@@ -129,6 +158,7 @@ pipeline {
         }
 
         stage('Build TPS') {
+            when { expression { env.SHOULD_BUILD == 'true' } }
             steps {
                 lock('clarion-generator') {
                     echo 'Acquired Clarion generator lock - starting Accura TPS build...'
@@ -151,21 +181,46 @@ pipeline {
     }
 
     post {
+        always {
+            // Record the tip we just attempted (whether it passed or failed) so the
+            // same commit is not rebuilt on the next hourly heartbeat. A later push
+            // (new SHA) or a newer branch will differ and trigger a fresh build. We
+            // deliberately do NOT retry a failed commit every hour - a fix is a new
+            // commit, which supersedes this marker.
+            script {
+                if (env.SHOULD_BUILD == 'true' && env.ACCURA_TIP?.trim()) {
+                    def marker = "${env.WORKSPACE}\\.tps-last-built-sha"
+                    powershell "Set-Content -Path '${marker}' -Value '${env.ACCURA_TIP}' -NoNewline"
+                }
+            }
+        }
         success {
-            emailext subject: "✅ Accura TPS Build #${BUILD_NUMBER} - Success",
-                     body: "Build #${BUILD_NUMBER} completed successfully.\n\nView: ${BUILD_URL}",
-                     to: 'mark@marksarson.com'
+            script {
+                if (env.SHOULD_BUILD == 'true') {
+                    emailext subject: "✅ Accura TPS Build #${BUILD_NUMBER} - Success (${env.ACCURA_BRANCH})",
+                             body: "Build #${BUILD_NUMBER} completed successfully on ${env.ACCURA_BRANCH}.\n\nView: ${BUILD_URL}",
+                             to: 'mark@marksarson.com'
+                }
+            }
         }
         failure {
-            emailext subject: "❌ Accura TPS Build #${BUILD_NUMBER} - FAILED",
-                     body: "Build #${BUILD_NUMBER} failed.\n\nView logs: ${BUILD_URL}console",
-                     attachmentsPattern: 'Accura/build-output/failed/*.log',
-                     to: 'mark@marksarson.com'
+            script {
+                if (env.SHOULD_BUILD == 'true') {
+                    emailext subject: "❌ Accura TPS Build #${BUILD_NUMBER} - FAILED (${env.ACCURA_BRANCH})",
+                             body: "Build #${BUILD_NUMBER} failed on ${env.ACCURA_BRANCH}.\n\nView logs: ${BUILD_URL}console",
+                             attachmentsPattern: 'Accura/build-output/failed/*.log',
+                             to: 'mark@marksarson.com'
+                }
+            }
         }
         fixed {
-            emailext subject: "✅ Accura TPS Build #${BUILD_NUMBER} - Back to Normal",
-                     body: "Build #${BUILD_NUMBER} is back to normal after a previous failure.\n\nView: ${BUILD_URL}",
-                     to: 'mark@marksarson.com'
+            script {
+                if (env.SHOULD_BUILD == 'true') {
+                    emailext subject: "✅ Accura TPS Build #${BUILD_NUMBER} - Back to Normal (${env.ACCURA_BRANCH})",
+                             body: "Build #${BUILD_NUMBER} is back to normal after a previous failure.\n\nView: ${BUILD_URL}",
+                             to: 'mark@marksarson.com'
+                }
+            }
         }
     }
 }
