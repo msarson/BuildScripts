@@ -19,6 +19,19 @@ pipeline {
         disableConcurrentBuilds()
     }
 
+    parameters {
+        // Manual override for the "already built" skip in 'Determine Build Branch'.
+        // Cron/heartbeat runs use the default (false) and keep skipping unchanged
+        // tips; a human can click "Build with Parameters", tick this, and force a
+        // rebuild of the current tip (e.g. to re-test a build-script change that did
+        // not alter the Accura repo).
+        booleanParam(
+            name: 'FORCE_BUILD',
+            defaultValue: false,
+            description: 'Build even if the latest branch tip has already been built (overrides the no-change skip).'
+        )
+    }
+
     triggers {
         // Hourly heartbeat. Fires unconditionally; the 'Determine Build Branch' stage
         // decides whether there is actually new work and skips the heavy Clarion build
@@ -84,14 +97,19 @@ pipeline {
                         def lastBuilt = powershell(returnStdout: true, script: """
                             if (Test-Path '${marker}') { (Get-Content '${marker}' -Raw).Trim() } else { '' }
                         """).trim()
-                        if (env.ACCURA_TIP == lastBuilt) {
+                        if (env.ACCURA_TIP == lastBuilt && !params.FORCE_BUILD) {
                             env.SHOULD_BUILD = 'false'
                             echo "No new commits on ${env.ACCURA_BRANCH} (tip ${env.ACCURA_TIP.take(10)} already built) - skipping heavy build."
                             currentBuild.result = 'NOT_BUILT'
                             currentBuild.description = "No change: ${env.ACCURA_BRANCH} @ ${env.ACCURA_TIP.take(10)}"
                         } else {
                             env.SHOULD_BUILD = 'true'
-                            currentBuild.description = "Build ${env.ACCURA_BRANCH} @ ${env.ACCURA_TIP.take(10)}"
+                            if (params.FORCE_BUILD && env.ACCURA_TIP == lastBuilt) {
+                                echo "FORCE_BUILD requested - rebuilding ${env.ACCURA_BRANCH} @ ${env.ACCURA_TIP.take(10)} even though it was already built."
+                                currentBuild.description = "Forced ${env.ACCURA_BRANCH} @ ${env.ACCURA_TIP.take(10)}"
+                            } else {
+                                currentBuild.description = "Build ${env.ACCURA_BRANCH} @ ${env.ACCURA_TIP.take(10)}"
+                            }
                         }
                     }
                 }
