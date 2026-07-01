@@ -186,7 +186,23 @@ if (-not (Test-Path $failedLogsDir)) {
 if ($BuildOnly -or $GenerateBuild) {
     Write-Host "`n--- Step 2: Building Projects ---" -ForegroundColor Magenta
     Write-Host "=============================================" -ForegroundColor Gray
-    
+
+    # Clear stale DLL export lists (genfiles\exp\*.exp) before building.
+    # Clarion reuses an existing .exp on incremental builds and does NOT refresh
+    # it when an external libsrc class signature changes (e.g. an NYS class method
+    # gains a parameter). The .exp then still names the old mangled symbol, and the
+    # linker reports it as "unresolved for export", failing the whole DLL. Deleting
+    # the export lists forces each DLL to regenerate its exports from the current
+    # symbols during compile/link. Cheap - only apps that actually build re-export.
+    $expDir = Join-Path $solutionDir "genfiles\exp"
+    if (Test-Path $expDir) {
+        $expFiles = @(Get-ChildItem -Path $expDir -Filter "*.exp" -File -ErrorAction SilentlyContinue)
+        if ($expFiles.Count -gt 0) {
+            $expFiles | Remove-Item -Force -ErrorAction SilentlyContinue
+            Write-Info "Cleared $($expFiles.Count) stale export list(s) from genfiles\exp"
+        }
+    }
+
     # Parse solution for projects
     Write-Info "Parsing solution file..."
     $projects = Get-ProjectsFromSolution $SolutionPath
